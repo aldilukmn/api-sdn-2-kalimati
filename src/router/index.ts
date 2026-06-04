@@ -27,7 +27,7 @@ router.post(
 );
 
 router.get(
-  `${registrationUrl}`,
+  `${registrationUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin,
   RegistrationController.getAll
 );
 

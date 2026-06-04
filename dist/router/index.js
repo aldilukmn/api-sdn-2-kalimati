@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 // import Gtk from '../controllers/gtk';
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
+const middlewares_1 = __importDefault(require("../middlewares"));
 const registration_controller_1 = __importDefault(require("../controllers/registration.controller"));
 // import { handleImage } from '../utils';
 // import UserMiddleware from '../middlewares/user';
@@ -23,7 +24,7 @@ router.post(`${baseUrl}/login`, user_controller_1.default.login);
 // router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, handleImage, User.updateUserById);
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
-router.get(`${registrationUrl}`, registration_controller_1.default.getAll);
+router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.getAll);
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 // GET GTK DATA
 // router.get(`${gtkUrl}`, Gtk.listGtk);

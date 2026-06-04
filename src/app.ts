@@ -9,7 +9,7 @@ app.use(cookieParser());
 app.use(express.json()); //For Login body json, POST METHOD
 app.use(express.urlencoded({ extended: true })); //For Login body json, POST METHOD
 app.use(cors({
-  origin: ['https://sdn2kalimati.vercel.app', 'http://localhost:3000'],
+  origin: ['https://sdn2kalimati.vercel.app', 'http://localhost:5000'],
   methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Sesuaikan dengan method yang kamu perlukan
   credentials: true
 }));

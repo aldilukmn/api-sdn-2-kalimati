@@ -13,7 +13,7 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json()); //For Login body json, POST METHOD
 app.use(express_1.default.urlencoded({ extended: true })); //For Login body json, POST METHOD
 app.use((0, cors_1.default)({
-    origin: ['https://sdn2kalimati.vercel.app', 'http://localhost:3000'],
+    origin: ['https://sdn2kalimati.vercel.app', 'http://localhost:5000'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Sesuaikan dengan method yang kamu perlukan
     credentials: true
 }));
