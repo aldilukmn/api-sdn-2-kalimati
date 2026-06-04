@@ -11,7 +11,7 @@ dotenv_1.default.config();
 class UserMiddleware {
     static verifyToken = async (req, res, next) => {
         try {
-            const token = req.cookies.auth_token;
+            const token = req.headers.authorization;
             const getToken = (0, utils_1.validateToken)(token);
             const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
             const user = await user_repo_1.default.getUserByUsername(decoded.user);
@@ -30,7 +30,7 @@ class UserMiddleware {
     };
     static isAdmin = async (req, res, next) => {
         try {
-            const token = req.cookies.auth_token;
+            const token = req.headers.authorization;
             const getToken = (0, utils_1.validateToken)(token);
             const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
             const user = await user_repo_1.default.getUserByUsername(decoded.user);

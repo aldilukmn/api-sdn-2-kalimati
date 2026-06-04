@@ -60,13 +60,13 @@ class User {
         const payload = req.body;
         try {
             const result = await user_services_1.default.login(payload);
-            const response = (0, response_1.default)(200, 'success', `${result.username} successfully login`);
-            res.cookie('auth_token', `Bearer ${result.token}`, {
-                httpOnly: true,
-                maxAge: 1000 * 60,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: 'none',
-            });
+            const response = (0, response_1.default)(200, 'success', `${result.username} successfully login`, result.token);
+            // res.cookie('auth_token', `Bearer ${result.token}`, {
+            //   httpOnly: true,
+            //   maxAge: 1000 * 60,
+            //   secure: process.env.NODE_ENV === "production",
+            //   sameSite: 'none',
+            // });
             res.status(200).json(response);
         }
         catch (e) {
