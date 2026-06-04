@@ -65,7 +65,7 @@ class User {
                 httpOnly: true,
                 maxAge: 1000 * 60,
                 secure: process.env.NODE_ENV === "production",
-                // sameSite: 'lax',
+                sameSite: 'none',
             });
             res.status(200).json(response);
         }
