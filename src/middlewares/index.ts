@@ -4,7 +4,7 @@ import { DecodedType } from './types';
 import env from 'dotenv';
 import User from '../models/entity/user.entity';
 import UserRepository from '../repositories/user.repo';
-import { createDefaultResponse, validateToken } from '../utils';
+import { defaultResponse, validateToken } from '../utils';
 env.config();
 
 export default class UserMiddleware {
@@ -27,7 +27,7 @@ export default class UserMiddleware {
       next();
     } catch (e) {
       if (e instanceof Error) {
-        const response = createDefaultResponse(401, 'fail', e.message);
+        const response = defaultResponse(401, 'fail', e.message);
         res.status(401).json(response);
       }
     }
@@ -53,7 +53,7 @@ export default class UserMiddleware {
 
     } catch (e) {
       if (e instanceof Error) {
-        const response = createDefaultResponse(401, 'fail', e.message);
+        const response = defaultResponse(401, 'fail', e.message);
         res.status(401).json(response);
       }
     }

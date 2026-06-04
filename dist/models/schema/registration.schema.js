@@ -1,0 +1,175 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importStar(require("mongoose"));
+const RegistrationSchema = new mongoose_1.Schema({
+    student: {
+        fullName: {
+            type: String,
+            required: true
+        },
+        nisn: {
+            type: String,
+            unique: true,
+            sparse: true,
+            trim: true
+        },
+        nik: {
+            type: String,
+            unique: true,
+            required: true
+        },
+        nokk: {
+            type: String,
+            unique: true,
+            required: true
+        },
+        birthPlace: {
+            type: String,
+            required: true
+        },
+        birthDate: {
+            type: Date,
+            required: true
+        },
+        gender: {
+            type: String,
+            required: true
+        },
+        religion: {
+            type: String,
+            required: true
+        },
+        address: {
+            street: {
+                type: String,
+                required: true
+            },
+            rt: {
+                type: String,
+                required: true
+            },
+            rw: {
+                type: String,
+                required: true
+            },
+            village: {
+                type: String,
+                required: true
+            },
+            district: {
+                type: String,
+                required: true
+            },
+            postalCode: {
+                type: String,
+                required: true
+            }
+        },
+        childOrder: {
+            type: Number,
+            required: true
+        },
+        kindergartenOrigin: {
+            type: String
+        }
+    },
+    father: {
+        name: {
+            type: String,
+            required: true
+        },
+        birthYear: {
+            type: String,
+            required: true
+        },
+        occupation: {
+            type: String
+        },
+        education: {
+            type: String
+        },
+        monthlyIncome: {
+            type: String
+        },
+        nik: {
+            type: String,
+            unique: true,
+            required: true
+        }
+    },
+    mother: {
+        name: {
+            type: String,
+            required: true
+        },
+        birthYear: {
+            type: String,
+            required: true
+        },
+        occupation: {
+            type: String
+        },
+        education: {
+            type: String
+        },
+        monthlyIncome: {
+            type: String
+        },
+        nik: {
+            type: String,
+            unique: true,
+            required: true
+        }
+    },
+    contactPhoneNumber: {
+        type: String,
+        required: true
+    },
+    hasGuardian: {
+        type: Boolean,
+        default: false
+    },
+    guardian: {
+        name: String,
+        relationship: String,
+        phoneNumber: String
+    }
+}, {
+    collection: "registration",
+    timestamps: true
+});
+const RegistrationModel = mongoose_1.default.model("registration", RegistrationSchema);
+exports.default = RegistrationModel;

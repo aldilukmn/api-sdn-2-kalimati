@@ -86,7 +86,7 @@ export default class UserService {
       };
 
       if (!process.env.SECRET_KEY) {
-        // const response = createDefaultResponse(500, 'fail', 'secret key is not defined in the environment variable!')
+        // const response = defaultResponse(500, 'fail', 'secret key is not defined in the environment variable!')
         // return response;
         throw new Error('secret key is not defined in the environment variable!');
       };
