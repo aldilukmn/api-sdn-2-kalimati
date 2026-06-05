@@ -15,6 +15,11 @@ class RegistrationRepository {
             createdAt: -1
         });
     }
+    static async findByStudentNik(nik) {
+        return registration_schema_1.default.findOne({
+            "student.nik": nik
+        });
+    }
     static async getRegistrationById(id) {
         if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
             throw new Error(`invalid id format: ${id}`);

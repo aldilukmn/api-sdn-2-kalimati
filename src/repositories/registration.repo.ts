@@ -20,6 +20,14 @@ export default class RegistrationRepository {
     });
   }
 
+  static async findByStudentNik(
+  nik: string
+  ): Promise<Registration | null> {
+    return RegistrationModel.findOne({
+      "student.nik": nik
+    });
+  }
+
   static async getRegistrationById(
     id: string
   ): Promise<Registration | null> {

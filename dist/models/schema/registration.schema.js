@@ -35,6 +35,17 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const RegistrationSchema = new mongoose_1.Schema({
+    registrationNumber: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ["Validated", "Unvalidated"],
+        default: "Unvalidated",
+        required: true
+    },
     student: {
         fullName: {
             type: String,

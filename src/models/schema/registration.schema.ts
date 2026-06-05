@@ -3,6 +3,17 @@ import Registration from "../entity/registration.entity";
 
 const RegistrationSchema: Schema = new Schema(
   {
+    registrationNumber: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ["Validated", "Unvalidated"],
+      default: "Unvalidated",
+      required: true
+    },
     student: {
       fullName: {
         type: String,

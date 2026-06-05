@@ -6,10 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const normalize_1 = require("../helper/normalize");
 const registration_repo_1 = __importDefault(require("../repositories/registration.repo"));
 const utils_1 = require("../utils");
+const registration_schema_1 = __importDefault(require("../models/schema/registration.schema"));
 class RegistrationService {
     static register = async (payload) => {
         try {
             const { student, father, mother, contactPhoneNumber } = payload;
+            const existingStudent = await registration_repo_1.default.findByStudentNik(student.nik);
+            if (existingStudent) {
+                throw new Error("NIK siswa sudah terdaftar");
+            }
             if (!student) {
                 throw new Error("Data siswa wajib diisi!");
             }
@@ -42,10 +47,8 @@ class RegistrationService {
             }
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
-            const registrationNumber = "PPDB-" +
-                new Date().getFullYear() +
-                "-" +
-                Date.now();
+            const totalRegistrations = await registration_schema_1.default.countDocuments();
+            const registrationNumber = `PPDB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
             const newRegistration = {
                 ...payload,
                 student: {
@@ -56,7 +59,7 @@ class RegistrationService {
                 father: (0, normalize_1.normalizeParent)(father),
                 mother: (0, normalize_1.normalizeParent)(mother),
                 registrationNumber,
-                status: 'pending'
+                status: 'Unvalidated'
             };
             await registration_repo_1.default.createRegistration(newRegistration);
             return newRegistration;

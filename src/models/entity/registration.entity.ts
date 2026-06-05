@@ -1,5 +1,9 @@
 import { Document } from "mongoose";
 
+export type RegistrationStatus =
+  | "Validated"
+  | "Unvalidated";
+
 export type Gender =
   | "Laki-laki"
   | "Perempuan";
@@ -49,17 +53,21 @@ export interface Guardian {
 }
 
 export default interface Registration extends Document {
+  registrationNumber: string;
+
   student: Student;
-
+  
   father: Parent;
-
+  
   mother: Parent;
-
+  
   contactPhoneNumber: string;
-
+  
   hasGuardian: boolean;
   guardian?: Guardian;
-
+  
   createdAt?: Date;
   updatedAt?: Date;
+
+  status: RegistrationStatus;
 }

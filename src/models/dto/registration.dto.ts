@@ -1,3 +1,7 @@
+export type RegistrationStatus =
+  | "Validated"
+  | "Unvalidated";
+
 export interface ParentRequest {
   name: string;
   birthYear: string;
@@ -37,6 +41,8 @@ export interface StudentRequest {
 export default interface RegistrationRequest {
   registrationNumber?: string;
 
+  status: RegistrationStatus;
+
   student: StudentRequest;
 
   father: ParentRequest;
@@ -48,6 +54,4 @@ export default interface RegistrationRequest {
   hasGuardian?: boolean;
 
   guardian?: GuardianRequest;
-
-  status?: 'pending' | 'verified' | 'accepted' | 'rejected';
 }

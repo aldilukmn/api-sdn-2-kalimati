@@ -1,8 +1,10 @@
+import { count } from 'console';
 import { normalizeParent } from '../helper/normalize';
 import RegistrationRequest from '../models/dto/registration.dto';
 import Registration from '../models/entity/registration.entity';
 import RegistrationRepository from '../repositories/registration.repo';
 import { capitalizeWords, validateAddress, validateNik, validateNokk, validateParent } from '../utils';
+import RegistrationModel from '../models/schema/registration.schema';
 
 
 export default class RegistrationService {
@@ -16,6 +18,13 @@ export default class RegistrationService {
         mother,
         contactPhoneNumber
       } = payload;
+
+    const existingStudent =
+    await RegistrationRepository.findByStudentNik(student.nik);
+
+    if (existingStudent) {
+      throw new Error("NIK siswa sudah terdaftar");
+    }
 
     if (!student) {
       throw new Error("Data siswa wajib diisi!");
@@ -61,11 +70,10 @@ export default class RegistrationService {
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
     
-      const registrationNumber =
-      "PPDB-" +
-      new Date().getFullYear() +
-      "-" +
-      Date.now();
+    const totalRegistrations = await RegistrationModel.countDocuments();
+
+    const registrationNumber =
+    `PPDB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
       
       const newRegistration: RegistrationRequest = {
         ...payload,
@@ -77,7 +85,7 @@ export default class RegistrationService {
         father: normalizeParent(father),
         mother: normalizeParent(mother),
         registrationNumber,
-        status: 'pending'
+        status: 'Unvalidated'
       };
 
       await RegistrationRepository.createRegistration(
