@@ -80,7 +80,13 @@ export default class RegistrationService {
         student: {
           ...student,
           fullName: capitalizeWords(student.fullName),
-          birthPlace: capitalizeWords(student.birthPlace)
+          birthPlace: capitalizeWords(student.birthPlace),
+          address: {
+            ...student.address,
+            street: capitalizeWords(student.address.street),
+            village: capitalizeWords(student.address.village),
+            district: capitalizeWords(student.address.district)
+          },
         },
         father: normalizeParent(father),
         mother: normalizeParent(mother),

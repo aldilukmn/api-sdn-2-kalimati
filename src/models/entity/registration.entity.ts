@@ -39,7 +39,7 @@ export interface Student {
 
 export interface Parent {
   name: string;
-  birthYear: string;
+  birthYear: number;
   occupation: string;
   education: string;
   monthlyIncome: string;

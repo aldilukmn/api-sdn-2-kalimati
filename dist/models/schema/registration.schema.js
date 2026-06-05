@@ -49,27 +49,28 @@ const RegistrationSchema = new mongoose_1.Schema({
     student: {
         fullName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         nisn: {
             type: String,
-            unique: true,
-            sparse: true,
             trim: true
         },
         nik: {
             type: String,
             unique: true,
-            required: true
+            required: true,
+            trim: true
         },
         nokk: {
             type: String,
-            unique: true,
-            required: true
+            required: true,
+            trim: true
         },
         birthPlace: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         birthDate: {
             type: Date,
@@ -86,27 +87,33 @@ const RegistrationSchema = new mongoose_1.Schema({
         address: {
             street: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             },
             rt: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             },
             rw: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             },
             village: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             },
             district: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             },
             postalCode: {
                 type: String,
-                required: true
+                required: true,
+                trim: true
             }
         },
         childOrder: {
@@ -114,17 +121,19 @@ const RegistrationSchema = new mongoose_1.Schema({
             required: true
         },
         kindergartenOrigin: {
-            type: String
+            type: String,
+            trim: true
         }
     },
     father: {
         name: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         birthYear: {
-            type: String,
-            required: true
+            type: Number,
+            required: true,
         },
         occupation: {
             type: String
@@ -137,18 +146,19 @@ const RegistrationSchema = new mongoose_1.Schema({
         },
         nik: {
             type: String,
-            unique: true,
-            required: true
+            required: true,
+            trim: true
         }
     },
     mother: {
         name: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         birthYear: {
-            type: String,
-            required: true
+            type: Number,
+            required: true,
         },
         occupation: {
             type: String
@@ -161,22 +171,32 @@ const RegistrationSchema = new mongoose_1.Schema({
         },
         nik: {
             type: String,
-            unique: true,
-            required: true
+            required: true,
+            trim: true
         }
     },
     contactPhoneNumber: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     hasGuardian: {
         type: Boolean,
         default: false
     },
     guardian: {
-        name: String,
-        relationship: String,
-        phoneNumber: String
+        name: {
+            type: String,
+            trim: true
+        },
+        relationship: {
+            type: String,
+            trim: true
+        },
+        phoneNumber: {
+            type: String,
+            trim: true
+        }
     }
 }, {
     collection: "registration",

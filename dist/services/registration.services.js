@@ -54,7 +54,13 @@ class RegistrationService {
                 student: {
                     ...student,
                     fullName: (0, utils_1.capitalizeWords)(student.fullName),
-                    birthPlace: (0, utils_1.capitalizeWords)(student.birthPlace)
+                    birthPlace: (0, utils_1.capitalizeWords)(student.birthPlace),
+                    address: {
+                        ...student.address,
+                        street: (0, utils_1.capitalizeWords)(student.address.street),
+                        village: (0, utils_1.capitalizeWords)(student.address.village),
+                        district: (0, utils_1.capitalizeWords)(student.address.district)
+                    },
                 },
                 father: (0, normalize_1.normalizeParent)(father),
                 mother: (0, normalize_1.normalizeParent)(mother),

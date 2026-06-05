@@ -4,7 +4,7 @@ export type RegistrationStatus =
 
 export interface ParentRequest {
   name: string;
-  birthYear: string;
+  birthYear: number;
   occupation: string;
   education: string;
   monthlyIncome: string;
@@ -19,7 +19,7 @@ export interface GuardianRequest {
 
 export interface StudentRequest {
   fullName: string;
-  nisn?: string;
+  nisn: string;
   nik: string;
   nokk: string;
   birthPlace: string;
@@ -35,7 +35,7 @@ export interface StudentRequest {
     postalCode: string;
   };
   childOrder: number;
-  kindergartenOrigin?: string;
+  kindergartenOrigin: string;
 }
 
 export default interface RegistrationRequest {
