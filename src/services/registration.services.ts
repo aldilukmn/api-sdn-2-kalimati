@@ -53,10 +53,6 @@ export default class RegistrationService {
       throw new Error("Agama wajib diisi!");
     }
     
-    if (!student.address) {
-      throw new Error("Alamat wajib diisi!");
-    }
-    
     validateAddress(student.address);
       
     if (!student.childOrder) {

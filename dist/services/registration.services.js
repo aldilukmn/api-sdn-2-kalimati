@@ -35,9 +35,6 @@ class RegistrationService {
             if (!student.religion) {
                 throw new Error("Agama wajib diisi!");
             }
-            if (!student.address) {
-                throw new Error("Alamat wajib diisi!");
-            }
             (0, utils_1.validateAddress)(student.address);
             if (!student.childOrder) {
                 throw new Error("Urutan anak dalam keluarga wajib diisi!");
