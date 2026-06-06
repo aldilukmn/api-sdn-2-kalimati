@@ -25,7 +25,7 @@ class RegistrationService {
                 throw new Error("Jenis kelamin wajib diisi!");
             }
             (0, utils_1.validateNik)(student.nik, 'NIK siswa');
-            (0, utils_1.validateNokk)(student.nokk, 'Nomor KK siswa');
+            (0, utils_1.validateNokk)(student.noKk, 'Nomor KK siswa');
             if (!student.birthPlace) {
                 throw new Error("Tempat lahir wajib diisi!");
             }

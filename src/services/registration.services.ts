@@ -39,7 +39,7 @@ export default class RegistrationService {
     }
       
     validateNik(student.nik, 'NIK siswa');
-    validateNokk(student.nokk, 'Nomor KK siswa');
+    validateNokk(student.noKk, 'Nomor KK siswa');
     
     if (!student.birthPlace) {
       throw new Error("Tempat lahir wajib diisi!");

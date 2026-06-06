@@ -30,7 +30,7 @@ const RegistrationSchema: Schema = new Schema(
         required: true,
         trim: true
       },
-      nokk: {
+      noKk: {
         type: String,
         required: true,
         trim: true

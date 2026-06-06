@@ -20,7 +20,7 @@ export interface Student {
   fullName: string;
   nisn?: string;
   nik: string;
-  nokk: string;
+  noKk: string;
   birthPlace: string;
   birthDate: Date;
   gender: Gender;

@@ -62,7 +62,7 @@ const RegistrationSchema = new mongoose_1.Schema({
             required: true,
             trim: true
         },
-        nokk: {
+        noKk: {
             type: String,
             required: true,
             trim: true
