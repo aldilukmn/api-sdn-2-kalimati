@@ -47,6 +47,19 @@ class RegistrationService {
             }
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
+            // Validate guardian data if present
+            const { guardian, hasGuardian } = payload;
+            if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+                if (!guardian.name) {
+                    throw new Error("Nama wali wajib diisi!");
+                }
+                if (!guardian.relationship) {
+                    throw new Error("Hubungan wali dengan siswa wajib diisi!");
+                }
+                if (!guardian.phoneNumber) {
+                    throw new Error("Nomor telepon wali wajib diisi!");
+                }
+            }
             const totalRegistrations = await registration_schema_1.default.countDocuments();
             const registrationNumber = `PPDB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
             const newRegistration = {
@@ -65,7 +78,13 @@ class RegistrationService {
                 father: (0, normalize_1.normalizeParent)(father),
                 mother: (0, normalize_1.normalizeParent)(mother),
                 registrationNumber,
-                status: 'Unvalidated'
+                status: 'Unvalidated',
+                hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
+                guardian: guardian ? {
+                    name: (0, utils_1.capitalizeWords)(guardian.name?.trim()) || '',
+                    relationship: (0, utils_1.capitalizeWords)(guardian.relationship?.trim()) || '',
+                    phoneNumber: guardian.phoneNumber?.trim() || ''
+                } : undefined
             };
             await registration_repo_1.default.createRegistration(newRegistration);
             return newRegistration;

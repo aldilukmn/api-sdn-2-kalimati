@@ -70,6 +70,20 @@ export default class RegistrationService {
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
     
+    // Validate guardian data if present
+    const { guardian, hasGuardian } = payload;
+    if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+      if (!guardian.name) {
+        throw new Error("Nama wali wajib diisi!");
+      }
+      if (!guardian.relationship) {
+        throw new Error("Hubungan wali dengan siswa wajib diisi!");
+      }
+      if (!guardian.phoneNumber) {
+        throw new Error("Nomor telepon wali wajib diisi!");
+      }
+    }
+    
     const totalRegistrations = await RegistrationModel.countDocuments();
 
     const registrationNumber =
@@ -91,7 +105,13 @@ export default class RegistrationService {
         father: normalizeParent(father),
         mother: normalizeParent(mother),
         registrationNumber,
-        status: 'Unvalidated'
+        status: 'Unvalidated',
+        hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
+        guardian: guardian ? {
+          name: capitalizeWords(guardian.name?.trim()) || '',
+          relationship: capitalizeWords(guardian.relationship?.trim()) || '',
+          phoneNumber: guardian.phoneNumber?.trim() || ''
+        } : undefined
       };
 
       await RegistrationRepository.createRegistration(
