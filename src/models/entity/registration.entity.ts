@@ -34,6 +34,7 @@ export interface Student {
     postalCode: string;
   };
   childOrder: number;
+  numberOfSiblings: number;
   kindergartenOrigin?: string;
 }
 

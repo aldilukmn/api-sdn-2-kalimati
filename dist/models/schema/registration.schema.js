@@ -120,6 +120,10 @@ const RegistrationSchema = new mongoose_1.Schema({
             type: Number,
             required: true
         },
+        numberOfSiblings: {
+            type: Number,
+            required: true
+        },
         kindergartenOrigin: {
             type: String,
             trim: true
