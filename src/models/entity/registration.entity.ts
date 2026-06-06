@@ -33,14 +33,14 @@ export interface Student {
     district: string;
     postalCode: string;
   };
-  childOrder: number;
-  numberOfSiblings: number;
+  childOrder: string;
+  numberOfSiblings: string;
   kindergartenOrigin?: string;
 }
 
 export interface Parent {
   name: string;
-  birthYear: number;
+  birthYear: string;
   occupation: string;
   education: string;
   monthlyIncome: string;

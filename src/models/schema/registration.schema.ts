@@ -85,12 +85,14 @@ const RegistrationSchema: Schema = new Schema(
         }
       },
       childOrder: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        trim: true
       },
       numberOfSiblings: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        trim: true
       },
       kindergartenOrigin: {
         type: String,
@@ -105,8 +107,9 @@ const RegistrationSchema: Schema = new Schema(
         trim: true
       },
       birthYear: {
-        type: Number,
+        type: String,
         required: true,
+        trim: true
       },
       occupation: {
         type: String
@@ -131,8 +134,9 @@ const RegistrationSchema: Schema = new Schema(
         trim: true
       },
       birthYear: {
-        type: Number,
+        type: String,
         required: true,
+        trim: true
       },
       occupation: {
         type: String
