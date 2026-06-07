@@ -10,8 +10,8 @@ const RegistrationSchema: Schema = new Schema(
     },
     status: {
       type: String,
-      enum: ["Validated", "Unvalidated"],
-      default: "Unvalidated",
+      enum: ["validated", "unvalidated"],
+      default: "unvalidated",
       required: true
     },
     student: {

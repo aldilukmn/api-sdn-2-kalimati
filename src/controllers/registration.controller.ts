@@ -81,7 +81,7 @@ export default class RegistrationController {
     );
 
     res.status(200).json(response);
-    } catch (e) {
+    } catch (e: Error | unknown) {
       if (e instanceof Error) {
         const response = defaultResponse(
           404,
@@ -93,4 +93,29 @@ export default class RegistrationController {
       }
     }
   };
+
+  static updateStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = req.params.id as string;
+      const { status } = req.body;
+      const result = await RegistrationService.updateStatus(id, status);
+      const response = defaultResponse(
+      200,
+      "success",
+      "Status pendaftaran berhasil diupdate",
+      result
+    );
+    res.json(response);
+    } catch (e: Error | unknown) {
+      if (e instanceof Error) {
+        const response = defaultResponse(
+          404,
+          "fail",
+          e.message
+        );
+
+        res.status(404).json(response);
+      }
+    }
+  }
 }

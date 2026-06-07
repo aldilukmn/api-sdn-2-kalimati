@@ -26,6 +26,7 @@ router.post(`${baseUrl}/login`, user_controller_1.default.login);
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
 router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.getAll);
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
+router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateStatus);
 // GET GTK DATA
 // router.get(`${gtkUrl}`, Gtk.listGtk);
 // router.get(`${gtkUrl}/:id`, Gtk.getGtkById);

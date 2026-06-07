@@ -42,8 +42,8 @@ const RegistrationSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["Validated", "Unvalidated"],
-        default: "Unvalidated",
+        enum: ["validated", "unvalidated"],
+        default: "unvalidated",
         required: true
     },
     student: {

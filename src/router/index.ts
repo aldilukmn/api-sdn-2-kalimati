@@ -36,6 +36,12 @@ router.get(
   RegistrationController.getById
 );
 
+router.patch(
+  `${registrationUrl}/:id`,
+  UserMiddleware.verifyToken, UserMiddleware.isAdmin,
+  RegistrationController.updateStatus
+);
+
 // GET GTK DATA
 // router.get(`${gtkUrl}`, Gtk.listGtk);
 // router.get(`${gtkUrl}/:id`, Gtk.getGtkById);

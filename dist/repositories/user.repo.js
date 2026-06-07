@@ -68,7 +68,7 @@ class UserRepository {
         const updateUser = await user_schema_1.default.findByIdAndUpdate(userId, {
             $set: data,
         }, {
-            new: true,
+            returnDocument: 'after',
             runValidators: true
         });
         if (!updateUser) {

@@ -105,5 +105,27 @@ class RegistrationService {
         }
         return registration;
     };
+    static updateStatus = async (id, status) => {
+        try {
+            if (!status || !['unvalidated', 'validated'].includes(status)) {
+                throw new Error("Status tidak valid!");
+            }
+            const registration = await registration_repo_1.default.getRegistrationById(id);
+            if (!registration) {
+                throw new Error("Data pendaftaran tidak ditemukan!");
+            }
+            const updated = await registration_repo_1.default.updateStatus(id, status);
+            if (!updated) {
+                throw new Error("Gagal mengubah status!");
+            }
+            return updated;
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                throw new Error(e.message);
+            }
+            throw e;
+        }
+    };
 }
 exports.default = RegistrationService;

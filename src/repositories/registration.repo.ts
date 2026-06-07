@@ -40,4 +40,22 @@ export default class RegistrationRepository {
     };
     return registration;
   }
+
+  static async updateStatus(
+  id: string,
+  status: 'unvalidated' | 'validated'
+): Promise<Registration | null> {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error(`invalid id format: ${id}`);
+  }
+  
+  return await RegistrationModel.findByIdAndUpdate(
+    id,
+    { 
+      status,
+      updatedAt: new Date() 
+    },
+    { returnDocument: 'after' }
+  );
+}
 }

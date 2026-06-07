@@ -76,7 +76,7 @@ export default class UserRepository {
       {
         $set: data,
       }, {
-        new: true,
+        returnDocument: 'after',
         runValidators: true
       }
     );

@@ -1,11 +1,9 @@
-import { count } from 'console';
 import { normalizeParent } from '../helper/normalize';
 import RegistrationRequest from '../models/dto/registration.dto';
 import Registration from '../models/entity/registration.entity';
 import RegistrationRepository from '../repositories/registration.repo';
 import { capitalizeWords, validateAddress, validateNik, validateNokk, validateParent } from '../utils';
 import RegistrationModel from '../models/schema/registration.schema';
-
 
 export default class RegistrationService {
   static register = async (
@@ -141,4 +139,33 @@ export default class RegistrationService {
 
     return registration;
   }
+  static updateStatus = async (
+  id: string,
+  status: 'unvalidated' | 'validated'
+): Promise<Registration> => {
+  try {
+    if (!status || !['unvalidated', 'validated'].includes(status)) {
+      throw new Error("Status tidak valid!");
+    }
+
+    const registration = await RegistrationRepository.getRegistrationById(id);
+    
+    if (!registration) {
+      throw new Error("Data pendaftaran tidak ditemukan!");
+    }
+
+    const updated = await RegistrationRepository.updateStatus(id, status);
+    
+    if (!updated) {
+      throw new Error("Gagal mengubah status!");
+    }
+
+    return updated;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    }
+    throw e;
+  }
+}; 
 }

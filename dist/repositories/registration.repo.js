@@ -32,5 +32,14 @@ class RegistrationRepository {
         ;
         return registration;
     }
+    static async updateStatus(id, status) {
+        if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+            throw new Error(`invalid id format: ${id}`);
+        }
+        return await registration_schema_1.default.findByIdAndUpdate(id, {
+            status,
+            updatedAt: new Date()
+        }, { returnDocument: 'after' });
+    }
 }
 exports.default = RegistrationRepository;
