@@ -1,6 +1,6 @@
 export type RegistrationStatus =
-  | "Validated"
-  | "Unvalidated";
+  | "validated"
+  | "unvalidated";
 
 export interface ParentRequest {
   name: string;

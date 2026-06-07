@@ -1,8 +1,8 @@
 import { Document } from "mongoose";
 
 export type RegistrationStatus =
-  | "Validated"
-  | "Unvalidated";
+  | "validated"
+  | "unvalidated";
 
 export type Gender =
   | "Laki-laki"

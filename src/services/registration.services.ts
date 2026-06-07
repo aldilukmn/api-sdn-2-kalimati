@@ -69,7 +69,7 @@ export default class RegistrationService {
     validateParent(mother, 'ibu');
     
     // Validate guardian data if present
-    const { guardian, hasGuardian } = payload;
+    const { guardian } = payload;
     if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
       if (!guardian.name) {
         throw new Error("Nama wali wajib diisi!");
@@ -103,12 +103,12 @@ export default class RegistrationService {
         father: normalizeParent(father),
         mother: normalizeParent(mother),
         registrationNumber,
-        status: 'Unvalidated',
+        status: 'unvalidated',
         hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
         guardian: guardian ? {
-          name: capitalizeWords(guardian.name?.trim()) || '',
-          relationship: capitalizeWords(guardian.relationship?.trim()) || '',
-          phoneNumber: guardian.phoneNumber?.trim() || ''
+          name: capitalizeWords(guardian.name?.trim()),
+          relationship: capitalizeWords(guardian.relationship?.trim()),
+          phoneNumber: guardian.phoneNumber?.trim()
         } : undefined
       };
 

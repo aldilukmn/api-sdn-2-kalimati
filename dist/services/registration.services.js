@@ -48,7 +48,7 @@ class RegistrationService {
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
             // Validate guardian data if present
-            const { guardian, hasGuardian } = payload;
+            const { guardian } = payload;
             if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
                 if (!guardian.name) {
                     throw new Error("Nama wali wajib diisi!");
@@ -78,12 +78,12 @@ class RegistrationService {
                 father: (0, normalize_1.normalizeParent)(father),
                 mother: (0, normalize_1.normalizeParent)(mother),
                 registrationNumber,
-                status: 'Unvalidated',
+                status: 'unvalidated',
                 hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
                 guardian: guardian ? {
-                    name: (0, utils_1.capitalizeWords)(guardian.name?.trim()) || '',
-                    relationship: (0, utils_1.capitalizeWords)(guardian.relationship?.trim()) || '',
-                    phoneNumber: guardian.phoneNumber?.trim() || ''
+                    name: (0, utils_1.capitalizeWords)(guardian.name?.trim()),
+                    relationship: (0, utils_1.capitalizeWords)(guardian.relationship?.trim()),
+                    phoneNumber: guardian.phoneNumber?.trim()
                 } : undefined
             };
             await registration_repo_1.default.createRegistration(newRegistration);
