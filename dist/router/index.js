@@ -20,7 +20,7 @@ router.post(`${userUrl}`, user_controller_1.default.register);
 // router.get(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.listUser);
 // router.delete(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.deleteUserById);
 router.post(`${baseUrl}/login`, user_controller_1.default.login);
-// router.delete(`${baseUrl}/logout`, UserMiddleware.verifyToken, User.logout);
+router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_controller_1.default.logout);
 // router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, handleImage, User.updateUserById);
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);

@@ -1,6 +1,7 @@
 import UserRequest from "../models/dto/user.dto";
 import User from "../models/entity/user.entity";
 import UserRepository from "../repositories/user.repo";
+import TokenBlacklistRepository from "../repositories/token-blacklist.repo";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 // import { handleCloudinary, isValidImage } from "../utils";
@@ -107,6 +108,35 @@ export default class UserService {
         throw new Error(e.message);
       throw new Error('an unknow error occured during login');
     };
+  }
+
+  static logout = async (token: string, username: string): Promise<void> => {
+    try {
+      if (!token) {
+        throw new Error('token is required!');
+      }
+
+      if (!process.env.SECRET_KEY) {
+        throw new Error('secret key is not defined in the environment variable!');
+      }
+
+      // Decode token to get expiresAt
+      const decoded = jwt.decode(token) as { exp?: number };
+      
+      if (!decoded || !decoded.exp) {
+        throw new Error('invalid token format!');
+      }
+
+      // Convert exp (seconds) to milliseconds and create Date
+      const expiresAt = new Date(decoded.exp * 1000);
+
+      // Add token to blacklist
+      await TokenBlacklistRepository.addToBlacklist(token, username, expiresAt);
+    } catch (e) {
+      if (e instanceof Error)
+        throw new Error(e.message);
+      throw new Error('an unknown error occurred during logout');
+    }
   }
 
   static deleteUserById = async (userId: string): Promise<void> => {

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_repo_1 = __importDefault(require("../repositories/user.repo"));
+const token_blacklist_repo_1 = __importDefault(require("../repositories/token-blacklist.repo"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // import { handleCloudinary, isValidImage } from "../utils";
@@ -96,6 +97,30 @@ class UserService {
             throw new Error('an unknow error occured during login');
         }
         ;
+    };
+    static logout = async (token, username) => {
+        try {
+            if (!token) {
+                throw new Error('token is required!');
+            }
+            if (!process.env.SECRET_KEY) {
+                throw new Error('secret key is not defined in the environment variable!');
+            }
+            // Decode token to get expiresAt
+            const decoded = jsonwebtoken_1.default.decode(token);
+            if (!decoded || !decoded.exp) {
+                throw new Error('invalid token format!');
+            }
+            // Convert exp (seconds) to milliseconds and create Date
+            const expiresAt = new Date(decoded.exp * 1000);
+            // Add token to blacklist
+            await token_blacklist_repo_1.default.addToBlacklist(token, username, expiresAt);
+        }
+        catch (e) {
+            if (e instanceof Error)
+                throw new Error(e.message);
+            throw new Error('an unknown error occurred during logout');
+        }
     };
     static deleteUserById = async (userId) => {
         try {

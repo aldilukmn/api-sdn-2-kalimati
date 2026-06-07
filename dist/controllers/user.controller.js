@@ -80,6 +80,14 @@ class User {
     };
     static logout = async (req, res) => {
         try {
+            const token = req.token;
+            const username = req.username;
+            if (!token || !username) {
+                const response = (0, response_1.default)(400, 'fail', 'token and username are required');
+                res.status(400).json(response);
+                return;
+            }
+            await user_services_1.default.logout(token, username);
             const response = (0, response_1.default)(200, 'success', 'user successfully logout');
             res.status(200).json(response);
         }

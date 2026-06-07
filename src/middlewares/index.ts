@@ -4,6 +4,7 @@ import { DecodedType } from './types';
 import env from 'dotenv';
 import User from '../models/entity/user.entity';
 import UserRepository from '../repositories/user.repo';
+import TokenBlacklistRepository from '../repositories/token-blacklist.repo';
 import { defaultResponse, validateToken } from '../utils';
 env.config();
 
@@ -14,6 +15,12 @@ export default class UserMiddleware {
 
       const getToken = validateToken(token);
 
+      // Check if token is blacklisted
+      const isBlacklisted = await TokenBlacklistRepository.isTokenBlacklisted(getToken);
+      if (isBlacklisted) {
+        throw new Error('token has been revoked!');
+      }
+
       const decoded = jwt.verify(getToken, `${process.env.SECRET_KEY}`) as DecodedType;
 
       const user = await UserRepository.getUserByUsername(decoded.user) as User;
@@ -23,6 +30,10 @@ export default class UserMiddleware {
       if (!isUser) {
         throw new Error('user not found!');
       } 
+
+      // Attach token & username to request for later use in logout
+      (req as any).token = getToken;
+      (req as any).username = decoded.user;
 
       next();
     } catch (e) {

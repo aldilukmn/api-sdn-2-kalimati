@@ -70,6 +70,16 @@ export default class User {
 
   static logout = async (req: Request, res: Response): Promise<void> => {
     try {
+      const token = (req as any).token;
+      const username = (req as any).username;
+
+      if (!token || !username) {
+        const response = defaultResponse(400, 'fail', 'token and username are required');
+        res.status(400).json(response);
+        return;
+      }
+
+      await UserService.logout(token, username);
       const response = defaultResponse(200, 'success', 'user successfully logout');
       res.status(200).json(response);
     } catch (e) {
