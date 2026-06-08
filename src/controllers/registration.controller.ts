@@ -104,7 +104,7 @@ export default class RegistrationController {
       "success",
       "Status pendaftaran berhasil diupdate",
       result
-    );
+      );
     res.json(response);
     } catch (e: Error | unknown) {
       if (e instanceof Error) {
@@ -118,4 +118,28 @@ export default class RegistrationController {
       }
     }
   }
+
+  static getTotalCount = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const count = await RegistrationService.getTotalCount();
+      
+      const response = defaultResponse(
+        200,
+        "success",
+        "Total pendaftar berhasil diambil",
+        { total: count }
+      );
+      
+      res.status(200).json(response);
+    } catch (e) {
+      if (e instanceof Error) {
+        const response = defaultResponse(
+          500,
+          "fail",
+          e.message
+        );
+        res.status(500).json(response);
+      }
+    }
+  };
 }

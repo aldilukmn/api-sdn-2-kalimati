@@ -127,5 +127,8 @@ class RegistrationService {
             throw e;
         }
     };
+    static getTotalCount = async () => {
+        return await registration_repo_1.default.getTotalCount();
+    };
 }
 exports.default = RegistrationService;

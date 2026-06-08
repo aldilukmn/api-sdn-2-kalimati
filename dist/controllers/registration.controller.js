@@ -62,5 +62,18 @@ class RegistrationController {
             }
         }
     };
+    static getTotalCount = async (req, res) => {
+        try {
+            const count = await registration_services_1.default.getTotalCount();
+            const response = (0, utils_1.defaultResponse)(200, "success", "Total pendaftar berhasil diambil", { total: count });
+            res.status(200).json(response);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(500, "fail", e.message);
+                res.status(500).json(response);
+            }
+        }
+    };
 }
 exports.default = RegistrationController;

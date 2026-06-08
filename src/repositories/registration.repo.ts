@@ -42,20 +42,23 @@ export default class RegistrationRepository {
   }
 
   static async updateStatus(
-  id: string,
-  status: 'unvalidated' | 'validated'
-): Promise<Registration | null> {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error(`invalid id format: ${id}`);
+    id: string,
+    status: 'unvalidated' | 'validated'
+  ): Promise<Registration | null> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error(`invalid id format: ${id}`);
+    }
+    
+    return await RegistrationModel.findByIdAndUpdate(
+      id,
+      { 
+        status,
+        updatedAt: new Date() 
+      },
+      { returnDocument: 'after' }
+    );
   }
-  
-  return await RegistrationModel.findByIdAndUpdate(
-    id,
-    { 
-      status,
-      updatedAt: new Date() 
-    },
-    { returnDocument: 'after' }
-  );
+  static async getTotalCount(): Promise<number> {
+  return await RegistrationModel.countDocuments();
 }
 }

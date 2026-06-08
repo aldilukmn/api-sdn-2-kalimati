@@ -140,32 +140,36 @@ export default class RegistrationService {
     return registration;
   }
   static updateStatus = async (
-  id: string,
-  status: 'unvalidated' | 'validated'
-): Promise<Registration> => {
-  try {
-    if (!status || !['unvalidated', 'validated'].includes(status)) {
-      throw new Error("Status tidak valid!");
-    }
+    id: string,
+    status: 'unvalidated' | 'validated'
+  ): Promise<Registration> => {
+    try {
+      if (!status || !['unvalidated', 'validated'].includes(status)) {
+        throw new Error("Status tidak valid!");
+      }
 
-    const registration = await RegistrationRepository.getRegistrationById(id);
-    
-    if (!registration) {
-      throw new Error("Data pendaftaran tidak ditemukan!");
-    }
+      const registration = await RegistrationRepository.getRegistrationById(id);
+      
+      if (!registration) {
+        throw new Error("Data pendaftaran tidak ditemukan!");
+      }
 
-    const updated = await RegistrationRepository.updateStatus(id, status);
-    
-    if (!updated) {
-      throw new Error("Gagal mengubah status!");
-    }
+      const updated = await RegistrationRepository.updateStatus(id, status);
+      
+      if (!updated) {
+        throw new Error("Gagal mengubah status!");
+      }
 
-    return updated;
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error(e.message);
+      return updated;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+      throw e;
     }
-    throw e;
-  }
-}; 
+  }; 
+
+  static getTotalCount = async (): Promise<number> => {
+  return await RegistrationRepository.getTotalCount();
+}
 }

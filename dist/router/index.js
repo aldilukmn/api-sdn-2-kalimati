@@ -25,6 +25,7 @@ router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_control
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
 router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.getAll);
+router.get(`${registrationUrl}/count`, registration_controller_1.default.getTotalCount);
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateStatus);
 // GET GTK DATA

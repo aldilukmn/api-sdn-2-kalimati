@@ -41,5 +41,8 @@ class RegistrationRepository {
             updatedAt: new Date()
         }, { returnDocument: 'after' });
     }
+    static async getTotalCount() {
+        return await registration_schema_1.default.countDocuments();
+    }
 }
 exports.default = RegistrationRepository;

@@ -32,6 +32,11 @@ router.get(
 );
 
 router.get(
+  `${registrationUrl}/count`,
+  RegistrationController.getTotalCount
+);
+
+router.get(
   `${registrationUrl}/:id`,
   RegistrationController.getById
 );
