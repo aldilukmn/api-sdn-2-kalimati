@@ -85,7 +85,7 @@ export default class RegistrationService {
     const totalRegistrations = await RegistrationModel.countDocuments();
 
     const registrationNumber =
-    `PPDB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
+    `SPMB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
       
       const newRegistration: RegistrationRequest = {
         ...payload,

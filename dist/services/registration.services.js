@@ -61,7 +61,7 @@ class RegistrationService {
                 }
             }
             const totalRegistrations = await registration_schema_1.default.countDocuments();
-            const registrationNumber = `PPDB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
+            const registrationNumber = `SPMB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
             const newRegistration = {
                 ...payload,
                 student: {
