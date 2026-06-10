@@ -41,7 +41,7 @@ const RegistrationSchema: Schema = new Schema(
         trim: true
       },
       birthDate: {
-        type: Date,
+        type: String,
         required: true
       },
       gender: {

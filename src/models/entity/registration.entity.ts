@@ -22,7 +22,7 @@ export interface Student {
   nik: string;
   noKk: string;
   birthPlace: string;
-  birthDate: Date;
+  birthDate: string;
   gender: Gender;
   religion: Religion;
   address: {

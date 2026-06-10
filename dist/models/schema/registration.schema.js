@@ -73,7 +73,7 @@ const RegistrationSchema = new mongoose_1.Schema({
             trim: true
         },
         birthDate: {
-            type: Date,
+            type: String,
             required: true
         },
         gender: {
