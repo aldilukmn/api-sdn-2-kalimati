@@ -42,9 +42,13 @@ class RegistrationService {
             if (!student.childOrder) {
                 throw new Error("Urutan anak dalam keluarga wajib diisi!");
             }
+            if (!student.numberOfSiblings) {
+                throw new Error("Jumlah saudara kandung wajib diisi!");
+            }
             if (!contactPhoneNumber) {
                 throw new Error("Nomor telepon wajib diisi!");
             }
+            !student.kindergartenOrigin ? "Tidak Sekolah TK/RA" : student.kindergartenOrigin.trim();
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
             // Validate guardian data if present

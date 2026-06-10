@@ -60,10 +60,16 @@ export default class RegistrationService {
     if (!student.childOrder) {
       throw new Error("Urutan anak dalam keluarga wajib diisi!");
     }
+
+    if (!student.numberOfSiblings) {
+      throw new Error("Jumlah saudara kandung wajib diisi!");
+    }
       
     if (!contactPhoneNumber) {
       throw new Error("Nomor telepon wajib diisi!");
-    }
+      }
+      
+    !student.kindergartenOrigin ? "Tidak Sekolah TK/RA" : student.kindergartenOrigin.trim()
     
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
