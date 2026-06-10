@@ -48,7 +48,9 @@ class RegistrationService {
             if (!contactPhoneNumber) {
                 throw new Error("Nomor telepon wajib diisi!");
             }
-            !student.kindergartenOrigin ? "Tidak Sekolah TK/RA" : student.kindergartenOrigin.trim();
+            student.kindergartenOrigin = !student.kindergartenOrigin
+                ? "Tidak Sekolah TK/RA"
+                : student.kindergartenOrigin.trim();
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
             // Validate guardian data if present

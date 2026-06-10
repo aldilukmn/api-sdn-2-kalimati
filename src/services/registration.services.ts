@@ -69,7 +69,9 @@ export default class RegistrationService {
       throw new Error("Nomor telepon wajib diisi!");
       }
       
-    !student.kindergartenOrigin ? "Tidak Sekolah TK/RA" : student.kindergartenOrigin.trim()
+    student.kindergartenOrigin = !student.kindergartenOrigin
+    ? "Tidak Sekolah TK/RA"
+    : student.kindergartenOrigin.trim();
     
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
