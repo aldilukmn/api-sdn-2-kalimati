@@ -3,7 +3,7 @@ import RegistrationRequest from '../models/dto/registration.dto';
 import Registration from '../models/entity/registration.entity';
 import RegistrationRepository from '../repositories/registration.repo';
 import { capitalizeWords, validateAddress, validateNik, validateNokk, validateParent } from '../utils';
-import RegistrationModel from '../models/schema/registration.schema';
+import CounterSchema from '../models/schema/counter.schema';
 
 export default class RegistrationService {
   static register = async (
@@ -14,7 +14,8 @@ export default class RegistrationService {
         student,
         father,
         mother,
-        contactPhoneNumber
+        contactPhoneNumber,
+        guardian
       } = payload;
 
     const existingStudent =
@@ -72,12 +73,11 @@ export default class RegistrationService {
     student.kindergartenOrigin = !student.kindergartenOrigin
     ? "Tidak Sekolah TK/RA"
     : student.kindergartenOrigin.trim();
-    
+      
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
     
     // Validate guardian data if present
-    const { guardian } = payload;
     if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
       if (!guardian.name) {
         throw new Error("Nama wali wajib diisi!");
@@ -90,10 +90,15 @@ export default class RegistrationService {
       }
     }
     
-    const totalRegistrations = await RegistrationModel.countDocuments();
+      // const totalRegistrations = await RegistrationModel.countDocuments();
+      const counter = await CounterSchema.findOneAndUpdate(
+        { _id: 'registrationNumber' },
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true }
+      );
 
-    const registrationNumber =
-    `SPMB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
+      const registrationNumber =
+      `SPMB26-SD-${String(counter.seq).padStart(3, "0")}`;
       
       const newRegistration: RegistrationRequest = {
         ...payload,
@@ -125,7 +130,10 @@ export default class RegistrationService {
       );
 
       return newRegistration;
-    } catch (e) {
+    } catch (e: any) {
+      if (e.code === 11000) {
+        throw new Error("Nomor pendaftaran sudah digunakan! Silakan coba lagi.");
+      }
       if (e instanceof Error) {
         throw new Error(e.message);
       }

@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const normalize_1 = require("../helper/normalize");
 const registration_repo_1 = __importDefault(require("../repositories/registration.repo"));
 const utils_1 = require("../utils");
-const registration_schema_1 = __importDefault(require("../models/schema/registration.schema"));
+const counter_schema_1 = __importDefault(require("../models/schema/counter.schema"));
 class RegistrationService {
     static register = async (payload) => {
         try {
-            const { student, father, mother, contactPhoneNumber } = payload;
+            const { student, father, mother, contactPhoneNumber, guardian } = payload;
             const existingStudent = await registration_repo_1.default.findByStudentNik(student.nik);
             if (existingStudent) {
                 throw new Error("NIK siswa sudah terdaftar");
@@ -54,7 +54,6 @@ class RegistrationService {
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
             // Validate guardian data if present
-            const { guardian } = payload;
             if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
                 if (!guardian.name) {
                     throw new Error("Nama wali wajib diisi!");
@@ -66,8 +65,9 @@ class RegistrationService {
                     throw new Error("Nomor telepon wali wajib diisi!");
                 }
             }
-            const totalRegistrations = await registration_schema_1.default.countDocuments();
-            const registrationNumber = `SPMB26-SD-${String(totalRegistrations + 1).padStart(3, "0")}`;
+            // const totalRegistrations = await RegistrationModel.countDocuments();
+            const counter = await counter_schema_1.default.findOneAndUpdate({ _id: 'registrationNumber' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
+            const registrationNumber = `SPMB26-SD-${String(counter.seq).padStart(3, "0")}`;
             const newRegistration = {
                 ...payload,
                 student: {
@@ -96,6 +96,9 @@ class RegistrationService {
             return newRegistration;
         }
         catch (e) {
+            if (e.code === 11000) {
+                throw new Error("Nomor pendaftaran sudah digunakan! Silakan coba lagi.");
+            }
             if (e instanceof Error) {
                 throw new Error(e.message);
             }
