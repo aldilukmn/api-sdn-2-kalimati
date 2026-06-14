@@ -97,6 +97,9 @@ class RegistrationService {
         }
         catch (e) {
             if (e.code === 11000) {
+                if (e.keyPattern && e.keyPattern['student.nik']) {
+                    throw new Error("NIK siswa sudah terdaftar! Silakan coba lagi.");
+                }
                 throw new Error("Nomor pendaftaran sudah digunakan! Silakan coba lagi.");
             }
             if (e instanceof Error) {
