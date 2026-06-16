@@ -44,7 +44,7 @@ router.get(
 router.patch(
   `${registrationUrl}/:id`,
   UserMiddleware.verifyToken, UserMiddleware.isAdmin,
-  RegistrationController.updateStatus
+  RegistrationController.updateData
 );
 
 // GET GTK DATA

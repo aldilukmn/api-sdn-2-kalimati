@@ -158,29 +158,115 @@ export default class RegistrationService {
 
     return registration;
   }
-  static updateStatus = async (
+  static updateData = async (
     id: string,
-    status: 'unvalidated' | 'validated'
+    payload: Partial<RegistrationRequest>
   ): Promise<Registration> => {
     try {
-      if (!status || !['unvalidated', 'validated'].includes(status)) {
-        throw new Error("Status tidak valid!");
-      }
+      const existing = await RegistrationRepository.getRegistrationById(id);
 
-      const registration = await RegistrationRepository.getRegistrationById(id);
-      
-      if (!registration) {
+      if (!existing) {
         throw new Error("Data pendaftaran tidak ditemukan!");
       }
 
-      const updated = await RegistrationRepository.updateStatus(id, status);
-      
+      const updateData: Record<string, any> = {};
+
+      if (payload.status) {
+        if (!['unvalidated', 'validated'].includes(payload.status)) {
+          throw new Error("Status tidak valid!");
+        }
+        updateData.status = payload.status;
+      }
+
+      if (payload.student) {
+        const student = payload.student;
+
+        if (!student.fullName) throw new Error("Nama lengkap siswa wajib diisi!");
+        if (!student.gender) throw new Error("Jenis kelamin wajib diisi!");
+        if (!student.nik) throw new Error("NIK siswa wajib diisi!");
+        if (!student.noKk) throw new Error("Nomor KK siswa wajib diisi!");
+        if (!student.birthPlace) throw new Error("Tempat lahir wajib diisi!");
+        if (!student.birthDate) throw new Error("Tanggal lahir wajib diisi!");
+        if (!student.religion) throw new Error("Agama wajib diisi!");
+        if (!student.childOrder) throw new Error("Urutan anak dalam keluarga wajib diisi!");
+        if (!student.numberOfSiblings) throw new Error("Jumlah saudara kandung wajib diisi!");
+
+        validateNik(student.nik, 'NIK siswa');
+        validateNokk(student.noKk, 'Nomor KK siswa');
+
+        if (!student.address) throw new Error("Alamat wajib diisi!");
+        validateAddress(student.address);
+
+        const existingNik = await RegistrationRepository.findByStudentNik(student.nik);
+        if (existingNik && existingNik._id.toString() !== id) {
+          throw new Error("NIK siswa sudah terdaftar!");
+        }
+
+        updateData.student = {
+          ...student,
+          fullName: capitalizeWords(student.fullName),
+          birthPlace: capitalizeWords(student.birthPlace),
+          kindergartenOrigin: !student.kindergartenOrigin
+            ? "Tidak Sekolah TK/RA"
+            : student.kindergartenOrigin.trim(),
+          address: {
+            ...student.address,
+            street: capitalizeWords(student.address.street),
+            village: capitalizeWords(student.address.village),
+            district: capitalizeWords(student.address.district)
+          }
+        };
+      }
+
+      if (payload.father) {
+        validateParent(payload.father, 'ayah');
+        updateData.father = normalizeParent(payload.father);
+      }
+
+      if (payload.mother) {
+        validateParent(payload.mother, 'ibu');
+        updateData.mother = normalizeParent(payload.mother);
+      }
+
+      if (payload.contactPhoneNumber) {
+        updateData.contactPhoneNumber = payload.contactPhoneNumber;
+      }
+
+      if (payload.hasGuardian !== undefined || payload.guardian !== undefined) {
+        const guardian = payload.guardian;
+        if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+          if (!guardian.name) throw new Error("Nama wali wajib diisi!");
+          if (!guardian.relationship) throw new Error("Hubungan wali dengan siswa wajib diisi!");
+          if (!guardian.phoneNumber) throw new Error("Nomor telepon wali wajib diisi!");
+          updateData.guardian = {
+            name: capitalizeWords(guardian.name?.trim()),
+            relationship: capitalizeWords(guardian.relationship?.trim()),
+            phoneNumber: guardian.phoneNumber?.trim()
+          };
+          updateData.hasGuardian = true;
+        } else {
+          updateData.guardian = null;
+          updateData.hasGuardian = false;
+        }
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        throw new Error("Tidak ada data yang diupdate!");
+      }
+
+      const updated = await RegistrationRepository.updateRegistration(id, updateData);
+
       if (!updated) {
-        throw new Error("Gagal mengubah status!");
+        throw new Error("Gagal mengupdate data pendaftaran!");
       }
 
       return updated;
-    } catch (e) {
+    } catch (e: any) {
+      if (e.code === 11000) {
+        if (e.keyPattern && e.keyPattern['student.nik']) {
+          throw new Error("NIK siswa sudah terdaftar!");
+        }
+      }
       if (e instanceof Error) {
         throw new Error(e.message);
       }

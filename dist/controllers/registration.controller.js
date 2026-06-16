@@ -47,18 +47,17 @@ class RegistrationController {
             }
         }
     };
-    static updateStatus = async (req, res) => {
+    static updateData = async (req, res) => {
         try {
             const id = req.params.id;
-            const { status } = req.body;
-            const result = await registration_services_1.default.updateStatus(id, status);
-            const response = (0, utils_1.defaultResponse)(200, "success", "Status pendaftaran berhasil diupdate", result);
+            const result = await registration_services_1.default.updateData(id, req.body);
+            const response = (0, utils_1.defaultResponse)(200, "success", "Data pendaftaran berhasil diupdate", result);
             res.json(response);
         }
         catch (e) {
             if (e instanceof Error) {
-                const response = (0, utils_1.defaultResponse)(404, "fail", e.message);
-                res.status(404).json(response);
+                const response = (0, utils_1.defaultResponse)(400, "fail", e.message);
+                res.status(400).json(response);
             }
         }
     };
