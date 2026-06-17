@@ -15,7 +15,8 @@ export default class RegistrationService {
         father,
         mother,
         contactPhoneNumber,
-        guardian
+        guardian,
+        hasGuardian
       } = payload;
 
     const existingStudent =
@@ -77,8 +78,10 @@ export default class RegistrationService {
     validateParent(father, 'ayah');
     validateParent(mother, 'ibu');
     
-    // Validate guardian data if present
-    if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+    if (hasGuardian) {
+      if (!guardian) {
+        throw new Error("Data wali wajib diisi!");
+      }
       if (!guardian.name) {
         throw new Error("Nama wali wajib diisi!");
       }
@@ -117,8 +120,8 @@ export default class RegistrationService {
         mother: normalizeParent(mother),
         registrationNumber,
         status: 'unvalidated',
-        hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
-        guardian: guardian ? {
+        hasGuardian: hasGuardian ?? false,
+        guardian: hasGuardian && guardian ? {
           name: capitalizeWords(guardian.name?.trim()),
           relationship: capitalizeWords(guardian.relationship?.trim()),
           phoneNumber: guardian.phoneNumber?.trim()
@@ -232,9 +235,10 @@ export default class RegistrationService {
         updateData.contactPhoneNumber = payload.contactPhoneNumber;
       }
 
-      if (payload.hasGuardian !== undefined || payload.guardian !== undefined) {
-        const guardian = payload.guardian;
-        if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+      if (payload.hasGuardian !== undefined) {
+        if (payload.hasGuardian) {
+          const guardian = payload.guardian;
+          if (!guardian) throw new Error("Data wali wajib diisi!");
           if (!guardian.name) throw new Error("Nama wali wajib diisi!");
           if (!guardian.relationship) throw new Error("Hubungan wali dengan siswa wajib diisi!");
           if (!guardian.phoneNumber) throw new Error("Nomor telepon wali wajib diisi!");

@@ -10,7 +10,7 @@ const counter_schema_1 = __importDefault(require("../models/schema/counter.schem
 class RegistrationService {
     static register = async (payload) => {
         try {
-            const { student, father, mother, contactPhoneNumber, guardian } = payload;
+            const { student, father, mother, contactPhoneNumber, guardian, hasGuardian } = payload;
             const existingStudent = await registration_repo_1.default.findByStudentNik(student.nik);
             if (existingStudent) {
                 throw new Error("NIK siswa sudah terdaftar");
@@ -53,8 +53,10 @@ class RegistrationService {
                 : student.kindergartenOrigin.trim();
             (0, utils_1.validateParent)(father, 'ayah');
             (0, utils_1.validateParent)(mother, 'ibu');
-            // Validate guardian data if present
-            if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+            if (hasGuardian) {
+                if (!guardian) {
+                    throw new Error("Data wali wajib diisi!");
+                }
                 if (!guardian.name) {
                     throw new Error("Nama wali wajib diisi!");
                 }
@@ -85,8 +87,8 @@ class RegistrationService {
                 mother: (0, normalize_1.normalizeParent)(mother),
                 registrationNumber,
                 status: 'unvalidated',
-                hasGuardian: guardian ? (guardian.name || guardian.relationship || guardian.phoneNumber ? true : false) : false,
-                guardian: guardian ? {
+                hasGuardian: hasGuardian ?? false,
+                guardian: hasGuardian && guardian ? {
                     name: (0, utils_1.capitalizeWords)(guardian.name?.trim()),
                     relationship: (0, utils_1.capitalizeWords)(guardian.relationship?.trim()),
                     phoneNumber: guardian.phoneNumber?.trim()
@@ -185,9 +187,11 @@ class RegistrationService {
             if (payload.contactPhoneNumber) {
                 updateData.contactPhoneNumber = payload.contactPhoneNumber;
             }
-            if (payload.hasGuardian !== undefined || payload.guardian !== undefined) {
-                const guardian = payload.guardian;
-                if (guardian && (guardian.name || guardian.relationship || guardian.phoneNumber)) {
+            if (payload.hasGuardian !== undefined) {
+                if (payload.hasGuardian) {
+                    const guardian = payload.guardian;
+                    if (!guardian)
+                        throw new Error("Data wali wajib diisi!");
                     if (!guardian.name)
                         throw new Error("Nama wali wajib diisi!");
                     if (!guardian.relationship)
