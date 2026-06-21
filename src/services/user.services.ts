@@ -66,7 +66,7 @@ export default class UserService {
     return getUser as User;
   }
 
-  static login = async (payload: UserRequest): Promise<{token: string, username: string}> => {
+  static login = async (payload: UserRequest): Promise<{username: string, role: string, token: string}> => {
     try {
       const { username, password } = payload;
 
@@ -100,8 +100,9 @@ export default class UserService {
       });
 
       return {
+        username,
+        role: getUser.role,
         token,
-        username
       };
     } catch (e) {
       if (e instanceof Error)

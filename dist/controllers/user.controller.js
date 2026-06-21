@@ -60,7 +60,10 @@ class User {
         const payload = req.body;
         try {
             const result = await user_services_1.default.login(payload);
-            const response = (0, response_1.default)(200, 'success', `${result.username} successfully login`, result.token);
+            const response = (0, response_1.default)(200, 'success', `${result.username} successfully login`, {
+                role: result.username,
+                token: result.token,
+            });
             // res.cookie('auth_token', `Bearer ${result.token}`, {
             //   httpOnly: true,
             //   maxAge: 1000 * 60,

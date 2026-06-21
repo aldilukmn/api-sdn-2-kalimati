@@ -87,8 +87,9 @@ class UserService {
                 expiresIn: '1h'
             });
             return {
+                username,
+                role: getUser.role,
                 token,
-                username
             };
         }
         catch (e) {
