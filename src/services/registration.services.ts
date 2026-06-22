@@ -101,7 +101,7 @@ export default class RegistrationService {
       );
 
       const registrationNumber =
-      `SPMB26-SD-${String(counter.seq).padStart(3, "0")}`;
+      `PMB26-SD-${String(counter.seq).padStart(3, "0")}`;
       
       const newRegistration: RegistrationRequest = {
         ...payload,

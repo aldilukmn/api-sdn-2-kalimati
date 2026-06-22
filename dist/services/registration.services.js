@@ -69,7 +69,7 @@ class RegistrationService {
             }
             // const totalRegistrations = await RegistrationModel.countDocuments();
             const counter = await counter_schema_1.default.findOneAndUpdate({ _id: 'registrationNumber' }, { $inc: { seq: 1 } }, { new: true, upsert: true });
-            const registrationNumber = `SPMB26-SD-${String(counter.seq).padStart(3, "0")}`;
+            const registrationNumber = `PMB26-SD-${String(counter.seq).padStart(3, "0")}`;
             const newRegistration = {
                 ...payload,
                 student: {
