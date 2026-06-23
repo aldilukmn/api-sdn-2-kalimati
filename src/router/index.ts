@@ -3,6 +3,8 @@ import express from 'express';
 import User from '../controllers/user.controller';
 import UserMiddleware from '../middlewares';
 import RegistrationController from '../controllers/registration.controller';
+import StudentAttendanceController from '../controllers/student-attendance.controller';
+import MasterStudentController from '../controllers/master-student.controller';
 // import { handleImage } from '../utils';
 // import UserMiddleware from '../middlewares/user';
 
@@ -10,6 +12,7 @@ const router = express.Router();
 const baseUrl = '/api';
 const userUrl = `${baseUrl}/user`;
 const registrationUrl = `${baseUrl}/registration`;
+const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 
 // FOR ADMIN
 // router.get(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.getUserById);
@@ -45,6 +48,28 @@ router.patch(
   `${registrationUrl}/:id`,
   UserMiddleware.verifyToken, UserMiddleware.isAdmin,
   RegistrationController.updateData
+);
+
+// STUDENT ATTENDANCE
+router.post(
+  `${studentAttendanceUrl}`,
+  StudentAttendanceController.create
+);
+
+router.get(
+  `${studentAttendanceUrl}`,
+  StudentAttendanceController.getByGradeAndDate
+);
+
+router.get(
+  `${studentAttendanceUrl}/report`,
+  StudentAttendanceController.getReportByGrade
+);
+
+// MASTER STUDENTS
+router.get(
+  `${baseUrl}/students`,
+  MasterStudentController.getByGrade
 );
 
 // GET GTK DATA

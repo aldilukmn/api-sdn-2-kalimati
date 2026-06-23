@@ -8,12 +8,15 @@ const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
 const middlewares_1 = __importDefault(require("../middlewares"));
 const registration_controller_1 = __importDefault(require("../controllers/registration.controller"));
+const student_attendance_controller_1 = __importDefault(require("../controllers/student-attendance.controller"));
+const master_student_controller_1 = __importDefault(require("../controllers/master-student.controller"));
 // import { handleImage } from '../utils';
 // import UserMiddleware from '../middlewares/user';
 const router = express_1.default.Router();
 const baseUrl = '/api';
 const userUrl = `${baseUrl}/user`;
 const registrationUrl = `${baseUrl}/registration`;
+const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 // FOR ADMIN
 // router.get(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.getUserById);
 router.post(`${userUrl}`, user_controller_1.default.register);
@@ -28,6 +31,12 @@ router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_
 router.get(`${registrationUrl}/count`, registration_controller_1.default.getTotalCount);
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateData);
+// STUDENT ATTENDANCE
+router.post(`${studentAttendanceUrl}`, student_attendance_controller_1.default.create);
+router.get(`${studentAttendanceUrl}`, student_attendance_controller_1.default.getByGradeAndDate);
+router.get(`${studentAttendanceUrl}/report`, student_attendance_controller_1.default.getReportByGrade);
+// MASTER STUDENTS
+router.get(`${baseUrl}/students`, master_student_controller_1.default.getByGrade);
 // GET GTK DATA
 // router.get(`${gtkUrl}`, Gtk.listGtk);
 // router.get(`${gtkUrl}/:id`, Gtk.getGtkById);
