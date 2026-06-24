@@ -66,6 +66,13 @@ export default class UserService {
     };
   }
 
+  static listUsers = async (role?: string): Promise<User[]> => {
+    if (role) {
+      return await UserRepository.getUsersByRole(role);
+    }
+    return await UserRepository.getAllUsers();
+  }
+
   static getUserById = async (userId: string): Promise<User> => {
     const getUser = await UserRepository.getUserById(userId);
     return getUser as User;

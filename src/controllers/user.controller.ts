@@ -1,13 +1,13 @@
 import UserRequest from '../models/dto/user.dto'
 import type { Request, Response} from 'express';
 import UserService from '../services/user.services';
-import UserModel from '../models/schema/user.schema';
 import defaultResponse from '../utils/response';
 
 export default class User {
   static listUser = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userData = await UserModel.find();
+      const role = req.query.role as string | undefined;
+      const userData = await UserService.listUsers(role);
       const response = defaultResponse(200, 'success', 'user successfully retrieved', userData);
       res.status(200).json(response);
     } catch (e) {

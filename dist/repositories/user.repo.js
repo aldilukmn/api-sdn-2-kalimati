@@ -55,6 +55,16 @@ class UserRepository {
         await user_schema_1.default.findByIdAndDelete(userId);
     }
     ;
+    // Get All Users
+    static async getAllUsers() {
+        const users = await user_schema_1.default.find().select('-password').exec();
+        return users;
+    }
+    // Get Users By Role
+    static async getUsersByRole(role) {
+        const users = await user_schema_1.default.find({ role }).select('-password').exec();
+        return users;
+    }
     // Update User
     static async updateUser(userId, data) {
         if (!userId) {

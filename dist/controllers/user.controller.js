@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_services_1 = __importDefault(require("../services/user.services"));
-const user_schema_1 = __importDefault(require("../models/schema/user.schema"));
 const response_1 = __importDefault(require("../utils/response"));
 class User {
     static listUser = async (req, res) => {
         try {
-            const userData = await user_schema_1.default.find();
+            const role = req.query.role;
+            const userData = await user_services_1.default.listUsers(role);
             const response = (0, response_1.default)(200, 'success', 'user successfully retrieved', userData);
             res.status(200).json(response);
         }

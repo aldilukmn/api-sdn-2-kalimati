@@ -59,6 +59,12 @@ class UserService {
         }
         ;
     };
+    static listUsers = async (role) => {
+        if (role) {
+            return await user_repo_1.default.getUsersByRole(role);
+        }
+        return await user_repo_1.default.getAllUsers();
+    };
     static getUserById = async (userId) => {
         const getUser = await user_repo_1.default.getUserById(userId);
         return getUser;

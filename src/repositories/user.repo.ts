@@ -61,6 +61,18 @@ export default class UserRepository {
     await UserModel.findByIdAndDelete(userId);
   };
 
+  // Get All Users
+  static async getAllUsers(): Promise<User[]> {
+    const users = await UserModel.find().select('-password').exec();
+    return users as User[];
+  }
+
+  // Get Users By Role
+  static async getUsersByRole(role: string): Promise<User[]> {
+    const users = await UserModel.find({ role }).select('-password').exec();
+    return users as User[];
+  }
+
   // Update User
   static async updateUser (userId: string, data: UserRequest): Promise<User> {
     if (!userId) {
