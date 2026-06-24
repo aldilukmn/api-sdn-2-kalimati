@@ -65,6 +65,10 @@ class UserRepository {
         const users = await user_schema_1.default.find({ role }).select('-password').exec();
         return users;
     }
+    // Count Users By Role
+    static async countByRole(role) {
+        return await user_schema_1.default.countDocuments({ role });
+    }
     // Update User
     static async updateUser(userId, data) {
         if (!userId) {

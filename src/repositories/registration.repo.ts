@@ -56,6 +56,11 @@ export default class RegistrationRepository {
     );
   }
   static async getTotalCount(): Promise<number> {
-  return await RegistrationModel.countDocuments();
-}
+    return await RegistrationModel.countDocuments();
+  }
+
+  static async countByStatus(status: string): Promise<number> {
+    const filter: Record<string, string> = { status };
+    return await RegistrationModel.countDocuments(filter as any);
+  }
 }

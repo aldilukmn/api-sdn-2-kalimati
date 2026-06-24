@@ -41,5 +41,9 @@ class RegistrationRepository {
     static async getTotalCount() {
         return await registration_schema_1.default.countDocuments();
     }
+    static async countByStatus(status) {
+        const filter = { status };
+        return await registration_schema_1.default.countDocuments(filter);
+    }
 }
 exports.default = RegistrationRepository;

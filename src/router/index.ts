@@ -5,6 +5,7 @@ import UserMiddleware from '../middlewares';
 import RegistrationController from '../controllers/registration.controller';
 import StudentAttendanceController from '../controllers/student-attendance.controller';
 import MasterStudentController from '../controllers/master-student.controller';
+import DashboardController from '../controllers/dashboard.controller';
 // import { handleImage } from '../utils';
 // import UserMiddleware from '../middlewares/user';
 
@@ -15,14 +16,11 @@ const registrationUrl = `${baseUrl}/registration`;
 const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 
 // FOR ADMIN
-// router.get(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.getUserById);
 router.post(`${userUrl}`, User.register);
 router.get(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.listUser);
-// router.delete(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.deleteUserById);
 router.post(`${baseUrl}/login`, User.login);
 router.post(`${baseUrl}/logout`, UserMiddleware.verifyToken, User.logout);
 router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.updateGrade);
-// router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, handleImage, User.updateUserById);
 
 // PPDB
 router.post(
@@ -76,11 +74,12 @@ router.get(
   MasterStudentController.getByGrade
 );
 
-// GET GTK DATA
-// router.get(`${gtkUrl}`, Gtk.listGtk);
-// router.get(`${gtkUrl}/:id`, Gtk.getGtkById);
-// router.post(`${gtkUrl}`, handleImage, Gtk.createGtk);
-// router.patch(`${gtkUrl}/:id`, handleImage, Gtk.updateGtk);
-// router.delete(`${gtkUrl}/:id`, Gtk.deleteGtkById);
+// DASHBOARD
+router.get(
+  `${baseUrl}/dashboard`,
+  UserMiddleware.verifyToken,
+  UserMiddleware.isAdmin,
+  DashboardController.getSummary
+);
 
 export default router;

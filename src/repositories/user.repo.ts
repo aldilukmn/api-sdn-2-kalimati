@@ -73,6 +73,11 @@ export default class UserRepository {
     return users as User[];
   }
 
+  // Count Users By Role
+  static async countByRole(role: string): Promise<number> {
+    return await UserModel.countDocuments({ role });
+  }
+
   // Update User
   static async updateUser (userId: string, data: UserRequest): Promise<User> {
     if (!userId) {
