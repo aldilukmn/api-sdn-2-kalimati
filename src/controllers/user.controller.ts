@@ -90,6 +90,21 @@ export default class User {
     }
   }
 
+  static updateGrade = async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id as string;
+    const { grade } = req.body;
+    try {
+      const user = await UserService.updateGrade(id, grade);
+      const response = defaultResponse(200, 'success', 'Grade user berhasil diupdate', user);
+      res.status(200).json(response);
+    } catch (e) {
+      if (e instanceof Error) {
+        const response = defaultResponse(400, 'fail', e.message);
+        res.status(400).json(response);
+      }
+    }
+  };
+
   static deleteUserById = async (req: Request, res: Response): Promise<void> => {
     const userId = req.params.id as string;
     try {

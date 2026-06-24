@@ -8,10 +8,14 @@ import jwt from 'jsonwebtoken'
 
 export default class UserService {
   static register = async (payload: UserRequest): Promise<UserRequest | undefined> => {
-    const { username, password, role }: UserRequest = payload
+    const { username, password, role, grade }: UserRequest = payload
     try {
       if (!username || !password || !role) {
         throw new Error(`${!username ? 'username' : !password ? 'password' : !role ? 'role' : null} is required!`)
+      }
+
+      if (role === 'guru' && !grade) {
+        throw new Error('Grade wajib diisi untuk role guru!');
       }
 
       // if (!email.includes('@')) {
@@ -49,6 +53,7 @@ export default class UserService {
         username: username.toLowerCase(),
         password: hasPass,
         role: role.toLowerCase(),
+        grade: role === 'guru' ? grade : undefined,
         // image_url: imageUrl.secure_url,
         // image_id: imageUrl.public_id
       }
@@ -94,7 +99,8 @@ export default class UserService {
 
       const token = jwt.sign({
         user: username,
-        role: getUser.role
+        role: getUser.role,
+        grade: getUser.grade
       }, process.env.SECRET_KEY, {
         expiresIn: '1h'
       });
@@ -138,6 +144,21 @@ export default class UserService {
       throw new Error('an unknown error occurred during logout');
     }
   }
+
+  static updateGrade = async (id: string, grade: string): Promise<User> => {
+    const user = await UserRepository.getUserById(id);
+
+    if (user.role !== 'guru') {
+      throw new Error('Hanya user dengan role guru yang bisa memiliki grade!');
+    }
+
+    const validGrades = ['1', '2', '3', '4', '5', '6'];
+    if (!validGrades.includes(grade)) {
+      throw new Error('Grade tidak valid! Harus 1-6.');
+    }
+
+    return await UserRepository.updateUser(id, { grade } as UserRequest);
+  };
 
   static deleteUserById = async (userId: string): Promise<void> => {
     try {

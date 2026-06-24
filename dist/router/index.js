@@ -24,6 +24,7 @@ router.post(`${userUrl}`, user_controller_1.default.register);
 // router.delete(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.deleteUserById);
 router.post(`${baseUrl}/login`, user_controller_1.default.login);
 router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_controller_1.default.logout);
+router.patch(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.updateGrade);
 // router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, handleImage, User.updateUserById);
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
@@ -32,7 +33,7 @@ router.get(`${registrationUrl}/count`, registration_controller_1.default.getTota
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateData);
 // STUDENT ATTENDANCE
-router.post(`${studentAttendanceUrl}`, student_attendance_controller_1.default.create);
+router.post(`${studentAttendanceUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isGuruOrAdmin, middlewares_1.default.verifyTeacherGrade, student_attendance_controller_1.default.create);
 router.get(`${studentAttendanceUrl}`, student_attendance_controller_1.default.getByGradeAndDate);
 router.get(`${studentAttendanceUrl}/report`, student_attendance_controller_1.default.getReportByGrade);
 // MASTER STUDENTS

@@ -15,6 +15,10 @@ const UserSchema: Schema = new Schema(
       type: String,
       require: true
     },
+    grade: {
+      type: String,
+      default: null,
+    },
     //   image_url: {
     //     type: String,
     //     require: true

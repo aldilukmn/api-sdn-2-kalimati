@@ -98,6 +98,21 @@ class User {
             }
         }
     };
+    static updateGrade = async (req, res) => {
+        const id = req.params.id;
+        const { grade } = req.body;
+        try {
+            const user = await user_services_1.default.updateGrade(id, grade);
+            const response = (0, response_1.default)(200, 'success', 'Grade user berhasil diupdate', user);
+            res.status(200).json(response);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, response_1.default)(400, 'fail', e.message);
+                res.status(400).json(response);
+            }
+        }
+    };
     static deleteUserById = async (req, res) => {
         const userId = req.params.id;
         try {

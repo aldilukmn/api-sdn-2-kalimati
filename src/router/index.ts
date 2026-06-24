@@ -21,6 +21,7 @@ router.post(`${userUrl}`, User.register);
 // router.delete(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.deleteUserById);
 router.post(`${baseUrl}/login`, User.login);
 router.post(`${baseUrl}/logout`, UserMiddleware.verifyToken, User.logout);
+router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.updateGrade);
 // router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, handleImage, User.updateUserById);
 
 // PPDB
@@ -53,6 +54,9 @@ router.patch(
 // STUDENT ATTENDANCE
 router.post(
   `${studentAttendanceUrl}`,
+  UserMiddleware.verifyToken,
+  UserMiddleware.isGuruOrAdmin,
+  UserMiddleware.verifyTeacherGrade,
   StudentAttendanceController.create
 );
 

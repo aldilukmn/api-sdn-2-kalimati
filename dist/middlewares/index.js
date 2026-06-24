@@ -37,6 +37,48 @@ class UserMiddleware {
             }
         }
     };
+    static verifyTeacherGrade = async (req, res, next) => {
+        try {
+            const { grade } = req.body;
+            if (!grade)
+                return next();
+            const token = req.headers.authorization;
+            const getToken = (0, utils_1.validateToken)(token);
+            const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
+            if (decoded.role === 'admin')
+                return next();
+            if (decoded.grade !== grade) {
+                throw new Error(`Akses ditolak! Anda hanya bisa input presensi untuk kelas ${decoded.grade}.`);
+            }
+            next();
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(401, 'fail', e.message);
+                res.status(401).json(response);
+            }
+        }
+    };
+    static isGuruOrAdmin = async (req, res, next) => {
+        try {
+            const token = req.headers.authorization;
+            const getToken = (0, utils_1.validateToken)(token);
+            const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
+            const user = await user_repo_1.default.getUserByUsername(decoded.user);
+            if (user.role !== "admin" && user.role !== "guru") {
+                throw new Error("Akses ditolak! Hanya guru dan admin yang diizinkan.");
+            }
+            req.token = getToken;
+            req.username = decoded.user;
+            next();
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(401, "fail", e.message);
+                res.status(401).json(response);
+            }
+        }
+    };
     static isAdmin = async (req, res, next) => {
         try {
             const token = req.headers.authorization;

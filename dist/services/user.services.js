@@ -10,10 +10,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // import { handleCloudinary, isValidImage } from "../utils";
 class UserService {
     static register = async (payload) => {
-        const { username, password, role } = payload;
+        const { username, password, role, grade } = payload;
         try {
             if (!username || !password || !role) {
                 throw new Error(`${!username ? 'username' : !password ? 'password' : !role ? 'role' : null} is required!`);
+            }
+            if (role === 'guru' && !grade) {
+                throw new Error('Grade wajib diisi untuk role guru!');
             }
             // if (!email.includes('@')) {
             //   throw new Error('Not email format!');
@@ -42,6 +45,7 @@ class UserService {
                 username: username.toLowerCase(),
                 password: hasPass,
                 role: role.toLowerCase(),
+                grade: role === 'guru' ? grade : undefined,
                 // image_url: imageUrl.secure_url,
                 // image_id: imageUrl.public_id
             };
@@ -82,7 +86,8 @@ class UserService {
             ;
             const token = jsonwebtoken_1.default.sign({
                 user: username,
-                role: getUser.role
+                role: getUser.role,
+                grade: getUser.grade
             }, process.env.SECRET_KEY, {
                 expiresIn: '1h'
             });
@@ -121,6 +126,17 @@ class UserService {
                 throw new Error(e.message);
             throw new Error('an unknown error occurred during logout');
         }
+    };
+    static updateGrade = async (id, grade) => {
+        const user = await user_repo_1.default.getUserById(id);
+        if (user.role !== 'guru') {
+            throw new Error('Hanya user dengan role guru yang bisa memiliki grade!');
+        }
+        const validGrades = ['1', '2', '3', '4', '5', '6'];
+        if (!validGrades.includes(grade)) {
+            throw new Error('Grade tidak valid! Harus 1-6.');
+        }
+        return await user_repo_1.default.updateUser(id, { grade });
     };
     static deleteUserById = async (userId) => {
         try {
