@@ -13,9 +13,10 @@ class UserRepository {
         }).exec();
         return userData;
     }
-    // Get User By Grade
+    // Get User By Grade (guru only)
     static async getUserByGrade(grade) {
         const userData = await user_schema_1.default.findOne({
+            role: 'guru',
             grade
         }).exec();
         return userData;

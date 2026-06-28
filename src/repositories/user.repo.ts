@@ -14,9 +14,10 @@ export default class UserRepository {
     return userData as User;
   }
 
-  // Get User By Grade
+  // Get User By Grade (guru only)
   static async getUserByGrade(grade: string): Promise<User | null> {
     const userData = await UserModel.findOne({
+      role: 'guru',
       grade
     }).exec();
 

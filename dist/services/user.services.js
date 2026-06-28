@@ -28,9 +28,15 @@ class UserService {
             if (password.length < 8) {
                 throw new Error('Password length should be more than 8 characters!');
             }
-            const getUsernameOrGrade = await user_repo_1.default.getUserByUsername(username || grade);
-            if (getUsernameOrGrade || grade) {
-                throw new Error(`${getUsernameOrGrade ? 'username sudah ada' : grade ? 'kelas sudah terisi' : null}`);
+            const existingUser = await user_repo_1.default.getUserByUsername(username);
+            if (existingUser) {
+                throw new Error('username sudah ada');
+            }
+            if (role === 'guru' && grade) {
+                const existingGrade = await user_repo_1.default.getUserByGrade(grade);
+                if (existingGrade) {
+                    throw new Error('kelas sudah terisi');
+                }
             }
             const salt = await bcrypt_1.default.genSalt();
             const hasPass = await bcrypt_1.default.hash(password, salt);
@@ -143,9 +149,11 @@ class UserService {
                 throw new Error('grade wajib diisi untuk role guru!');
             }
         }
-        const getGrade = await user_repo_1.default.getUserByGrade(data.grade);
-        if (getGrade) {
-            throw new Error('kelas sudah terisi!');
+        if (data.grade && data.grade !== user.grade) {
+            const existingGrade = await user_repo_1.default.getUserByGrade(data.grade);
+            if (existingGrade) {
+                throw new Error('kelas sudah terisi');
+            }
         }
         return await user_repo_1.default.updateUser(id, data);
     };
