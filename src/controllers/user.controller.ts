@@ -90,12 +90,12 @@ export default class User {
     }
   }
 
-  static updateGrade = async (req: Request, res: Response): Promise<void> => {
+  static updateUser = async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const { grade } = req.body;
+    const { grade, nip, fullName, title }: UserRequest = req.body;
     try {
-      const user = await UserService.updateGrade(id, grade);
-      const response = defaultResponse(200, 'success', 'Grade user berhasil diupdate', user);
+      const user = await UserService.updateUser(id, { grade, nip, fullName, title });
+      const response = defaultResponse(200, 'success', 'User berhasil diupdate', user);
       res.status(200).json(response);
     } catch (e) {
       if (e instanceof Error) {

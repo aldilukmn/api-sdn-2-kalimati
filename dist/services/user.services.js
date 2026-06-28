@@ -7,47 +7,41 @@ const user_repo_1 = __importDefault(require("../repositories/user.repo"));
 const token_blacklist_repo_1 = __importDefault(require("../repositories/token-blacklist.repo"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const utils_1 = require("../utils");
 // import { handleCloudinary, isValidImage } from "../utils";
 class UserService {
     static register = async (payload) => {
-        const { username, password, role, grade } = payload;
+        const { username, password, role, grade, nip, fullName, title } = payload;
         try {
-            if (!username || !password || !role) {
-                throw new Error(`${!username ? 'username' : !password ? 'password' : !role ? 'role' : null} is required!`);
+            if (!username || !password || !role || !fullName || !title || !nip) {
+                throw new Error(`${!username ? 'username' :
+                    !password ? 'password' :
+                        !role ? 'role' :
+                            !fullName ? 'nama lengkap' :
+                                !title ? 'gelar' :
+                                    !nip ? 'nip' :
+                                        null} wajib diisi!`);
             }
             if (role === 'guru' && !grade) {
                 throw new Error('Grade wajib diisi untuk role guru!');
             }
-            // if (!email.includes('@')) {
-            //   throw new Error('Not email format!');
-            // }
             if (password.length < 8) {
                 throw new Error('Password length should be more than 8 characters!');
             }
-            // if (isValidImage(imageType)) {
-            //   throw new Error('It\'s not image format!')
-            // };
-            // if (!isImage) {
-            //   throw new Error('Image is undefined!')
-            // }
-            const getUsername = await user_repo_1.default.getUserByUsername(username);
-            // const getUserEmail = await UserRepository.getUserByEmail(email) as User;
-            // if (getUsername ?? getUserEmail) {
-            //   throw new Error(`${getUsername ? 'username' : 'email'} already exist!`);
-            // }
-            if (getUsername) {
-                throw new Error(`${getUsername ? 'username' : 'email'} already exist!`);
+            const getUsername = await user_repo_1.default.getUserByUsername(username || grade);
+            if (getUsername || grade) {
+                throw new Error(`${getUsername ? 'username sudah ada' : grade ? 'kelas sudah terisi' : null}`);
             }
-            // const imageUrl = await handleCloudinary(isImage, 'user');
             const salt = await bcrypt_1.default.genSalt();
             const hasPass = await bcrypt_1.default.hash(password, salt);
             const newUser = {
                 username: username.toLowerCase(),
                 password: hasPass,
                 role: role.toLowerCase(),
-                grade: role === 'guru' ? grade : undefined,
-                // image_url: imageUrl.secure_url,
-                // image_id: imageUrl.public_id
+                grade,
+                nip,
+                fullName: (0, utils_1.capitalizeWords)(fullName),
+                title,
             };
             await user_repo_1.default.createUser(newUser);
             return newUser;
@@ -93,7 +87,9 @@ class UserService {
             const token = jsonwebtoken_1.default.sign({
                 user: username,
                 role: getUser.role,
-                grade: getUser.grade
+                grade: getUser.grade,
+                fullName: getUser.fullName,
+                title: getUser.title,
             }, process.env.SECRET_KEY, {
                 expiresIn: '1h'
             });
@@ -133,16 +129,21 @@ class UserService {
             throw new Error('an unknown error occurred during logout');
         }
     };
-    static updateGrade = async (id, grade) => {
+    static updateUser = async (id, data) => {
         const user = await user_repo_1.default.getUserById(id);
-        if (user.role !== 'guru') {
-            throw new Error('Hanya user dengan role guru yang bisa memiliki grade!');
+        if (data.grade !== undefined) {
+            if (user.role !== 'guru') {
+                throw new Error('Hanya user dengan role guru yang bisa memiliki grade!');
+            }
+            const validGrades = ['1', '2', '3', '4', '5', '6'];
+            if (!validGrades.includes(data.grade)) {
+                throw new Error('Grade tidak valid! Harus 1-6.');
+            }
+            if (user.role === 'guru' && !data.grade) {
+                throw new Error('Grade wajib diisi untuk role guru!');
+            }
         }
-        const validGrades = ['1', '2', '3', '4', '5', '6'];
-        if (!validGrades.includes(grade)) {
-            throw new Error('Grade tidak valid! Harus 1-6.');
-        }
-        return await user_repo_1.default.updateUser(id, { grade });
+        return await user_repo_1.default.updateUser(id, data);
     };
     static deleteUserById = async (userId) => {
         try {
@@ -154,40 +155,5 @@ class UserService {
                 throw new Error(e.message);
         }
     };
-    // static updateUser = async (payload: UserRequest, userId: string, image: string | undefined, imageType: any): Promise<User | undefined> => {
-    //   let userUpdate: UserRequest;
-    //   try {
-    //     if (image) {
-    //       if (!isValidImage(imageType)) {
-    //         throw new Error('It\'s not image format!');
-    //       };
-    //       const newImageUrl = await handleCloudinary(image, 'user');
-    //       userUpdate = await UserService.saveUpdate(payload, userId, newImageUrl.secure_url, newImageUrl.public_id);
-    //     } else {
-    //       userUpdate = await UserService.saveUpdate(payload, userId);
-    //     }
-    //     return userUpdate as User;
-    //   } catch (e) {
-    //     if (e instanceof Error) {
-    //       throw new Error(e.message);
-    //     }
-    //   }
-    // };
-    static async saveUpdate(options, userId, newImageUrl, newImageId) {
-        const { password } = options;
-        const salt = await bcrypt_1.default.genSalt();
-        const newHasPass = await bcrypt_1.default.hash(password, salt);
-        const existingUser = await user_repo_1.default.getUserById(userId);
-        const passIsCorrect = await bcrypt_1.default.compare(password, existingUser.password);
-        const updateUser = {
-            username: existingUser.username,
-            password: !passIsCorrect ? newHasPass : existingUser.password,
-            // image_url: newImageUrl || existingUser.image_url,
-            // image_id: newImageId || existingUser.image_id
-        };
-        await user_repo_1.default.updateUser(userId, updateUser);
-        return updateUser;
-    }
-    ;
 }
 exports.default = UserService;

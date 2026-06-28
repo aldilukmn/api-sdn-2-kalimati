@@ -59,7 +59,7 @@ class UserMiddleware {
             }
         }
     };
-    static isGuruOrAdmin = async (req, res, next) => {
+    static isTeacherOrAdmin = async (req, res, next) => {
         try {
             const token = req.headers.authorization;
             const getToken = (0, utils_1.validateToken)(token);
@@ -85,8 +85,7 @@ class UserMiddleware {
             const getToken = (0, utils_1.validateToken)(token);
             const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
             const user = await user_repo_1.default.getUserByUsername(decoded.user);
-            const isAdmin = user.role === decoded.role;
-            if (!isAdmin) {
+            if (user.role !== 'admin') {
                 throw new Error('it\'s not admin!');
             }
             next();

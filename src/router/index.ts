@@ -16,11 +16,11 @@ const registrationUrl = `${baseUrl}/registration`;
 const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 
 // FOR ADMIN
-router.post(`${userUrl}`, User.register);
+router.post(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin , User.register);
 router.get(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.listUser);
 router.post(`${baseUrl}/login`, User.login);
 router.post(`${baseUrl}/logout`, UserMiddleware.verifyToken, User.logout);
-router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.updateGrade);
+router.patch(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.updateUser);
 
 // PPDB
 router.post(
@@ -53,7 +53,7 @@ router.patch(
 router.post(
   `${studentAttendanceUrl}`,
   UserMiddleware.verifyToken,
-  UserMiddleware.isGuruOrAdmin,
+  UserMiddleware.isTeacherOrAdmin,
   UserMiddleware.verifyTeacherGrade,
   StudentAttendanceController.create
 );

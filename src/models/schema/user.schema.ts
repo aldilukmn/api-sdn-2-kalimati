@@ -17,7 +17,19 @@ const UserSchema: Schema = new Schema(
     },
     grade: {
       type: String,
-      default: null,
+      drequire: true
+    },
+    nip: {
+      type: String,
+      drequire: true
+    },
+    fullName: {
+      type: String,
+      require: true
+    },
+    title: {
+      type: String,
+      require: true
     },
     //   image_url: {
     //     type: String,

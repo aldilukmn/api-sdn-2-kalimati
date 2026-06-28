@@ -15,9 +15,9 @@ export default class UserRepository {
   }
 
   // Get User By Email
-  static async getUserByEmail(email: string): Promise<User | null> {
+  static async getUserByGrade(grade: string): Promise<User | null> {
     const userData = await UserModel.findOne({
-      email
+      grade
     }).exec();
 
     return userData;

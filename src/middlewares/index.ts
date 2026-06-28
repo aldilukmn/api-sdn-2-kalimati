@@ -68,7 +68,7 @@ export default class UserMiddleware {
     }
   };
 
-  static isGuruOrAdmin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  static isTeacherOrAdmin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const token: string | undefined = req.headers.authorization as string;
 
@@ -104,9 +104,7 @@ export default class UserMiddleware {
 
       const user = await UserRepository.getUserByUsername(decoded.user) as User;
 
-      const isAdmin: boolean = user.role === decoded.role;
-
-      if (!isAdmin) {
+      if (user.role !== 'admin') {
         throw new Error('it\'s not admin!');
       }
 

@@ -19,11 +19,11 @@ const userUrl = `${baseUrl}/user`;
 const registrationUrl = `${baseUrl}/registration`;
 const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 // FOR ADMIN
-router.post(`${userUrl}`, user_controller_1.default.register);
+router.post(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.register);
 router.get(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.listUser);
 router.post(`${baseUrl}/login`, user_controller_1.default.login);
 router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_controller_1.default.logout);
-router.patch(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.updateGrade);
+router.patch(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.updateUser);
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
 router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.getAll);
@@ -31,7 +31,7 @@ router.get(`${registrationUrl}/count`, registration_controller_1.default.getTota
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateData);
 // STUDENT ATTENDANCE
-router.post(`${studentAttendanceUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isGuruOrAdmin, middlewares_1.default.verifyTeacherGrade, student_attendance_controller_1.default.create);
+router.post(`${studentAttendanceUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isTeacherOrAdmin, middlewares_1.default.verifyTeacherGrade, student_attendance_controller_1.default.create);
 router.get(`${studentAttendanceUrl}`, student_attendance_controller_1.default.getByGradeAndDate);
 router.get(`${studentAttendanceUrl}/report`, student_attendance_controller_1.default.getReportByGrade);
 // MASTER STUDENTS
