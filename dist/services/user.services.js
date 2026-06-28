@@ -143,7 +143,7 @@ class UserService {
                 throw new Error('grade wajib diisi untuk role guru!');
             }
         }
-        const getGrade = await user_repo_1.default.getUserByUsername(data.grade);
+        const getGrade = await user_repo_1.default.getUserByGrade(data.grade);
         if (getGrade) {
             throw new Error('kelas sudah terisi!');
         }
