@@ -100,9 +100,9 @@ class User {
     };
     static updateUser = async (req, res) => {
         const id = req.params.id;
-        const { grade, nip, fullName, title } = req.body;
+        const UserRequest = req.body;
         try {
-            const user = await user_services_1.default.updateUser(id, { grade, nip, fullName, title });
+            const user = await user_services_1.default.updateUser(id, UserRequest);
             const response = (0, response_1.default)(200, 'success', 'User berhasil diupdate', user);
             res.status(200).json(response);
         }

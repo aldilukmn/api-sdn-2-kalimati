@@ -13,7 +13,7 @@ class UserRepository {
         }).exec();
         return userData;
     }
-    // Get User By Email
+    // Get User By Grade
     static async getUserByGrade(grade) {
         const userData = await user_schema_1.default.findOne({
             grade

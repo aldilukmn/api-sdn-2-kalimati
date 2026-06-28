@@ -21,6 +21,7 @@ const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 // FOR ADMIN
 router.post(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.register);
 router.get(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.listUser);
+router.delete(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.deleteUserById);
 router.post(`${baseUrl}/login`, user_controller_1.default.login);
 router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_controller_1.default.logout);
 router.patch(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.updateUser);

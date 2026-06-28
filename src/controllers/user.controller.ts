@@ -2,6 +2,7 @@ import UserRequest from '../models/dto/user.dto'
 import type { Request, Response} from 'express';
 import UserService from '../services/user.services';
 import defaultResponse from '../utils/response';
+import UserEntity from '../models/entity/user.entity';
 
 export default class User {
   static listUser = async (req: Request, res: Response): Promise<void> => {
@@ -92,9 +93,9 @@ export default class User {
 
   static updateUser = async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const { grade, nip, fullName, title }: UserRequest = req.body;
+    const UserRequest: UserEntity = req.body;
     try {
-      const user = await UserService.updateUser(id, { grade, nip, fullName, title });
+      const user = await UserService.updateUser(id, UserRequest);
       const response = defaultResponse(200, 'success', 'User berhasil diupdate', user);
       res.status(200).json(response);
     } catch (e) {

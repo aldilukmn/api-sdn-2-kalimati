@@ -29,9 +29,9 @@ export default class UserService {
         throw new Error('Password length should be more than 8 characters!')
       }
 
-      const getUsername = await UserRepository.getUserByUsername(username || grade) as User;
-      if (getUsername || grade) {
-        throw new Error(`${getUsername ? 'username sudah ada' : grade ? 'kelas sudah terisi' : null}`);
+      const getUsernameOrGrade = await UserRepository.getUserByUsername(username || grade) as User;
+      if (getUsernameOrGrade || grade) {
+        throw new Error(`${getUsernameOrGrade ? 'username sudah ada' : grade ? 'kelas sudah terisi' : null}`);
       }
 
       const salt = await bcrypt.genSalt();
@@ -143,7 +143,7 @@ export default class UserService {
     }
   }
 
-  static updateUser = async (id: string, data: { grade?: string; nip?: string; fullName?: string; title?: string }): Promise<User> => {
+  static updateUser = async (id: string, data: User ): Promise<User> => {
     const user = await UserRepository.getUserById(id);
 
     if (data.grade !== undefined) {
@@ -152,11 +152,15 @@ export default class UserService {
       }
       const validGrades = ['1', '2', '3', '4', '5', '6'];
       if (!validGrades.includes(data.grade)) {
-        throw new Error('Grade tidak valid! Harus 1-6.');
+        throw new Error('grade tidak valid! Harus 1-6.');
       }
       if (user.role === 'guru' && !data.grade) {
-        throw new Error('Grade wajib diisi untuk role guru!');
+        throw new Error('grade wajib diisi untuk role guru!');
       }
+    }
+    const getGrade = await UserRepository.getUserByUsername(data.grade) as User;
+    if (getGrade) {
+      throw new Error('kelas sudah terisi!');
     }
 
     return await UserRepository.updateUser(id, data as UserRequest);
