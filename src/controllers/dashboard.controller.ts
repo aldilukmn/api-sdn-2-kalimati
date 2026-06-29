@@ -5,7 +5,9 @@ import { defaultResponse } from "../utils";
 export default class DashboardController {
   static getSummary = async (req: Request, res: Response): Promise<void> => {
     try {
-      const summary = await DashboardService.getSummary();
+      const month = req.query.month ? Number(req.query.month) : undefined;
+      const year = req.query.year ? Number(req.query.year) : undefined;
+      const summary = await DashboardService.getSummary(month, year);
       const response = defaultResponse(
         200,
         "success",

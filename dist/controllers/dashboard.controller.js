@@ -8,7 +8,9 @@ const utils_1 = require("../utils");
 class DashboardController {
     static getSummary = async (req, res) => {
         try {
-            const summary = await dashboard_services_1.default.getSummary();
+            const month = req.query.month ? Number(req.query.month) : undefined;
+            const year = req.query.year ? Number(req.query.year) : undefined;
+            const summary = await dashboard_services_1.default.getSummary(month, year);
             const response = (0, utils_1.defaultResponse)(200, "success", "Dashboard summary retrieved successfully", summary);
             res.status(200).json(response);
         }
