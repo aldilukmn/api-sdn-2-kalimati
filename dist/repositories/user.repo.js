@@ -66,6 +66,11 @@ class UserRepository {
         const users = await user_schema_1.default.find({ role }).select('-password').exec();
         return users;
     }
+    // Get Users By Multiple Roles
+    static async getUsersByRoles(roles) {
+        const users = await user_schema_1.default.find({ role: { $in: roles } }).select('-password').exec();
+        return users;
+    }
     // Count Users By Role
     static async countByRole(role) {
         return await user_schema_1.default.countDocuments({ role });

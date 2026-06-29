@@ -69,6 +69,9 @@ export default class UserService {
 
   static listUsers = async (role?: string): Promise<User[]> => {
     if (role) {
+      if (role.includes(',')) {
+        return await UserRepository.getUsersByRoles(role.split(',').map(r => r.trim()));
+      }
       return await UserRepository.getUsersByRole(role);
     }
     return await UserRepository.getAllUsers();

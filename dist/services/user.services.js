@@ -65,6 +65,9 @@ class UserService {
     };
     static listUsers = async (role) => {
         if (role) {
+            if (role.includes(',')) {
+                return await user_repo_1.default.getUsersByRoles(role.split(',').map(r => r.trim()));
+            }
             return await user_repo_1.default.getUsersByRole(role);
         }
         return await user_repo_1.default.getAllUsers();

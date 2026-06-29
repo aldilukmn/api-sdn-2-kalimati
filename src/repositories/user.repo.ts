@@ -74,6 +74,12 @@ export default class UserRepository {
     return users as User[];
   }
 
+  // Get Users By Multiple Roles
+  static async getUsersByRoles(roles: string[]): Promise<User[]> {
+    const users = await UserModel.find({ role: { $in: roles } }).select('-password').exec();
+    return users as User[];
+  }
+
   // Count Users By Role
   static async countByRole(role: string): Promise<number> {
     return await UserModel.countDocuments({ role });
