@@ -75,6 +75,12 @@ router.get(
   MasterStudentController.getByGrade
 );
 
+// TEACHER BY GRADE (PUBLIC)
+router.get(
+  `${baseUrl}/teacher-by-grade/:grade`,
+  User.getTeacherByGrade
+);
+
 // DASHBOARD
 router.get(
   `${baseUrl}/dashboard`,

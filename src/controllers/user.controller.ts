@@ -93,10 +93,34 @@ export default class User {
 
   static updateUser = async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const UserRequest: UserEntity = req.body;
+    const { grade, nip, fullName, title, username } = req.body;
     try {
-      const user = await UserService.updateUser(id, UserRequest);
+      const user = await UserService.updateUser(id, { grade, nip, fullName, title, username } as any);
       const response = defaultResponse(200, 'success', 'User berhasil diupdate', user);
+      res.status(200).json(response);
+    } catch (e) {
+      if (e instanceof Error) {
+        const response = defaultResponse(400, 'fail', e.message);
+        res.status(400).json(response);
+      }
+    }
+  };
+
+  static getTeacherByGrade = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const grade = req.params.grade as string;
+      const teacher = await UserService.getTeacherByGrade(grade);
+      if (!teacher) {
+        const response = defaultResponse(404, 'fail', 'Guru tidak ditemukan untuk kelas ini');
+        res.status(404).json(response);
+        return;
+      }
+      const response = defaultResponse(200, 'success', 'Data guru berhasil diambil', {
+        fullName: teacher.fullName,
+        grade: teacher.grade,
+        nip: teacher.nip,
+        title: teacher.title,
+      });
       res.status(200).json(response);
     } catch (e) {
       if (e instanceof Error) {

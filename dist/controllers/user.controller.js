@@ -100,10 +100,34 @@ class User {
     };
     static updateUser = async (req, res) => {
         const id = req.params.id;
-        const UserRequest = req.body;
+        const { grade, nip, fullName, title, username } = req.body;
         try {
-            const user = await user_services_1.default.updateUser(id, UserRequest);
+            const user = await user_services_1.default.updateUser(id, { grade, nip, fullName, title, username });
             const response = (0, response_1.default)(200, 'success', 'User berhasil diupdate', user);
+            res.status(200).json(response);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, response_1.default)(400, 'fail', e.message);
+                res.status(400).json(response);
+            }
+        }
+    };
+    static getTeacherByGrade = async (req, res) => {
+        try {
+            const grade = req.params.grade;
+            const teacher = await user_services_1.default.getTeacherByGrade(grade);
+            if (!teacher) {
+                const response = (0, response_1.default)(404, 'fail', 'Guru tidak ditemukan untuk kelas ini');
+                res.status(404).json(response);
+                return;
+            }
+            const response = (0, response_1.default)(200, 'success', 'Data guru berhasil diambil', {
+                fullName: teacher.fullName,
+                grade: teacher.grade,
+                nip: teacher.nip,
+                title: teacher.title,
+            });
             res.status(200).json(response);
         }
         catch (e) {

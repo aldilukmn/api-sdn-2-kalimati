@@ -74,6 +74,10 @@ export default class UserService {
     return getUser as User;
   }
 
+  static getTeacherByGrade = async (grade: string): Promise<User | null> => {
+    return await UserRepository.getUserByGrade(grade);
+  }
+
   static login = async (payload: UserRequest): Promise<{token: string, username: string}> => {
     try {
       const { username, password } = payload;
@@ -165,6 +169,13 @@ export default class UserService {
         throw new Error('grade wajib diisi untuk role guru!');
       }
     }
+    if (data.username && data.username !== user.username) {
+      const existingUser = await UserRepository.getUserByUsername(data.username);
+      if (existingUser) {
+        throw new Error('username sudah ada');
+      }
+    }
+
     if (data.grade && data.grade !== user.grade) {
       const existingGrade = await UserRepository.getUserByGrade(data.grade);
       if (existingGrade) {

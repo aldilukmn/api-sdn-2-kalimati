@@ -37,6 +37,8 @@ router.get(`${studentAttendanceUrl}`, student_attendance_controller_1.default.ge
 router.get(`${studentAttendanceUrl}/report`, student_attendance_controller_1.default.getReportByGrade);
 // MASTER STUDENTS
 router.get(`${baseUrl}/students`, master_student_controller_1.default.getByGrade);
+// TEACHER BY GRADE (PUBLIC)
+router.get(`${baseUrl}/teacher-by-grade/:grade`, user_controller_1.default.getTeacherByGrade);
 // DASHBOARD
 router.get(`${baseUrl}/dashboard`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, dashboard_controller_1.default.getSummary);
 exports.default = router;

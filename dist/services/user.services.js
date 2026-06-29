@@ -69,6 +69,9 @@ class UserService {
         const getUser = await user_repo_1.default.getUserById(userId);
         return getUser;
     };
+    static getTeacherByGrade = async (grade) => {
+        return await user_repo_1.default.getUserByGrade(grade);
+    };
     static login = async (payload) => {
         try {
             const { username, password } = payload;
@@ -147,6 +150,12 @@ class UserService {
             }
             if (user.role === 'guru' && !data.grade) {
                 throw new Error('grade wajib diisi untuk role guru!');
+            }
+        }
+        if (data.username && data.username !== user.username) {
+            const existingUser = await user_repo_1.default.getUserByUsername(data.username);
+            if (existingUser) {
+                throw new Error('username sudah ada');
             }
         }
         if (data.grade && data.grade !== user.grade) {
