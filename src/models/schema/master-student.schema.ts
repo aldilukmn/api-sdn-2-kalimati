@@ -19,6 +19,11 @@ const MasterStudentSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["L", "P"],
+    },
   },
   {
     collection: "master_students",

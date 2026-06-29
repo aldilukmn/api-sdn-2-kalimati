@@ -51,6 +51,11 @@ const MasterStudentSchema = new mongoose_1.Schema({
         required: true,
         trim: true,
     },
+    gender: {
+        type: String,
+        required: true,
+        enum: ["L", "P"],
+    },
 }, {
     collection: "master_students",
     timestamps: true,
