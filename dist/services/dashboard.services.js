@@ -9,7 +9,7 @@ const master_student_repo_1 = __importDefault(require("../repositories/master-st
 const student_attendance_repo_1 = __importDefault(require("../repositories/student-attendance.repo"));
 class DashboardService {
     static getSummary = async (month, year) => {
-        const [totalRegistrants, validated, unvalidated, totalStudents, totalTeachers, attendanceByStatus, attendanceByGrade] = await Promise.all([
+        const [totalRegistrants, validated, unvalidated, totalStudents, totalTeachers, attendanceByStatus, attendanceByGrade, totalDays] = await Promise.all([
             registration_repo_1.default.getTotalCount(),
             registration_repo_1.default.countByStatus("validated"),
             registration_repo_1.default.countByStatus("unvalidated"),
@@ -17,6 +17,7 @@ class DashboardService {
             user_repo_1.default.countByRole("guru"),
             student_attendance_repo_1.default.countByStatus(month, year),
             student_attendance_repo_1.default.attendanceRateByGrade(month, year),
+            student_attendance_repo_1.default.countUniqueDates(month, year),
         ]);
         return {
             totalRegistrants,
@@ -26,6 +27,7 @@ class DashboardService {
             totalTeachers,
             attendanceByStatus,
             attendanceByGrade,
+            totalDays,
         };
     };
 }

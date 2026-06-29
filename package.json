@@ -14,7 +14,8 @@
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "seed": "npx ts-node src/data/seed.ts"
+    "seed-student": "npx ts-node src/data/seed-student.ts",
+    "seed-attendance": "ts-node src/data/seed-attendance.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

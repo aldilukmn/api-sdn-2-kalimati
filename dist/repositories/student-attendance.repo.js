@@ -40,6 +40,11 @@ class StudentAttendanceRepository {
         });
         return counts;
     }
+    static async countUniqueDates(month, year) {
+        const filter = this.buildMonthFilter(month, year);
+        const dates = await student_attendance_schema_1.default.distinct("date", filter);
+        return dates.length;
+    }
     static async attendanceRateByGrade(month, year) {
         const filter = this.buildMonthFilter(month, year);
         const results = await student_attendance_schema_1.default.aggregate([

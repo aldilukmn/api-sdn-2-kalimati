@@ -48,6 +48,12 @@ export default class StudentAttendanceRepository {
     return counts;
   }
 
+  static async countUniqueDates(month?: number, year?: number): Promise<number> {
+    const filter = this.buildMonthFilter(month, year);
+    const dates = await StudentAttendanceModel.distinct("date", filter);
+    return dates.length;
+  }
+
   static async attendanceRateByGrade(month?: number, year?: number): Promise<{ grade: string; rate: number }[]> {
     const filter = this.buildMonthFilter(month, year);
     const results = await StudentAttendanceModel.aggregate([

@@ -5,7 +5,7 @@ import StudentAttendanceRepository from "../repositories/student-attendance.repo
 
 export default class DashboardService {
   static getSummary = async (month?: number, year?: number) => {
-    const [totalRegistrants, validated, unvalidated, totalStudents, totalTeachers, attendanceByStatus, attendanceByGrade] =
+    const [totalRegistrants, validated, unvalidated, totalStudents, totalTeachers, attendanceByStatus, attendanceByGrade, totalDays] =
       await Promise.all([
         RegistrationRepository.getTotalCount(),
         RegistrationRepository.countByStatus("validated"),
@@ -14,6 +14,7 @@ export default class DashboardService {
         UserRepository.countByRole("guru"),
         StudentAttendanceRepository.countByStatus(month, year),
         StudentAttendanceRepository.attendanceRateByGrade(month, year),
+        StudentAttendanceRepository.countUniqueDates(month, year),
       ]);
 
     return {
@@ -24,6 +25,7 @@ export default class DashboardService {
       totalTeachers,
       attendanceByStatus,
       attendanceByGrade,
+      totalDays,
     };
   };
 }
