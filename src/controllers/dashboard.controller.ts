@@ -22,4 +22,23 @@ export default class DashboardController {
       }
     }
   };
+
+  static getTeacherSummary = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const grade = (req as any).grade;
+      const summary = await DashboardService.getTeacherSummary(grade);
+      const response = defaultResponse(
+        200,
+        "success",
+        "Teacher dashboard summary retrieved successfully",
+        summary
+      );
+      res.status(200).json(response);
+    } catch (e) {
+      if (e instanceof Error) {
+        const response = defaultResponse(500, "fail", e.message);
+        res.status(500).json(response);
+      }
+    }
+  };
 }

@@ -41,4 +41,5 @@ router.get(`${baseUrl}/students`, master_student_controller_1.default.getByGrade
 router.get(`${baseUrl}/teacher-by-grade/:grade`, user_controller_1.default.getTeacherByGrade);
 // DASHBOARD
 router.get(`${baseUrl}/dashboard`, middlewares_1.default.verifyToken, middlewares_1.default.isAdminOrHead, dashboard_controller_1.default.getSummary);
+router.get(`${baseUrl}/dashboard/teacher`, middlewares_1.default.verifyToken, middlewares_1.default.isTeacher, dashboard_controller_1.default.getTeacherSummary);
 exports.default = router;

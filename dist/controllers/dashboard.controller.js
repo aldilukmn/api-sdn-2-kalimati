@@ -21,5 +21,19 @@ class DashboardController {
             }
         }
     };
+    static getTeacherSummary = async (req, res) => {
+        try {
+            const grade = req.grade;
+            const summary = await dashboard_services_1.default.getTeacherSummary(grade);
+            const response = (0, utils_1.defaultResponse)(200, "success", "Teacher dashboard summary retrieved successfully", summary);
+            res.status(200).json(response);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(500, "fail", e.message);
+                res.status(500).json(response);
+            }
+        }
+    };
 }
 exports.default = DashboardController;

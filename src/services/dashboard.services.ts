@@ -28,4 +28,16 @@ export default class DashboardService {
       totalDays,
     };
   };
+
+  static getTeacherSummary = async (grade: string) => {
+    const [totalStudents, genderCounts] = await Promise.all([
+      MasterStudentRepository.countByGrade(grade),
+      MasterStudentRepository.countByGradeAndGender(grade),
+    ]);
+    return {
+      totalStudents,
+      maleCount: genderCounts.male,
+      femaleCount: genderCounts.female,
+    };
+  };
 }

@@ -97,6 +97,24 @@ class UserMiddleware {
             }
         }
     };
+    static isTeacher = async (req, res, next) => {
+        try {
+            const token = req.headers.authorization;
+            const getToken = (0, utils_1.validateToken)(token);
+            const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
+            if (decoded.role !== 'guru') {
+                throw new Error('Akses ditolak! Hanya guru yang diizinkan.');
+            }
+            req.grade = decoded.grade;
+            next();
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(401, 'fail', e.message);
+                res.status(401).json(response);
+            }
+        }
+    };
     static isAdmin = async (req, res, next) => {
         try {
             const token = req.headers.authorization;

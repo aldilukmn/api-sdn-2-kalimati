@@ -89,4 +89,11 @@ router.get(
   DashboardController.getSummary
 );
 
+router.get(
+  `${baseUrl}/dashboard/teacher`,
+  UserMiddleware.verifyToken,
+  UserMiddleware.isTeacher,
+  DashboardController.getTeacherSummary
+);
+
 export default router;

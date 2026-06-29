@@ -114,6 +114,26 @@ export default class UserMiddleware {
     }
   };
 
+  static isTeacher = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const token: string | undefined = req.headers.authorization as string;
+      const getToken = validateToken(token);
+      const decoded = jwt.verify(getToken, `${process.env.SECRET_KEY}`) as DecodedType;
+
+      if (decoded.role !== 'guru') {
+        throw new Error('Akses ditolak! Hanya guru yang diizinkan.');
+      }
+
+      (req as any).grade = decoded.grade;
+      next();
+    } catch (e) {
+      if (e instanceof Error) {
+        const response = defaultResponse(401, 'fail', e.message);
+        res.status(401).json(response);
+      }
+    }
+  };
+
   static isAdmin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const token: string | undefined = req.headers.authorization as string;
