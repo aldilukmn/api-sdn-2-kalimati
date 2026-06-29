@@ -11,7 +11,7 @@ export default class DashboardService {
         RegistrationRepository.countByStatus("validated"),
         RegistrationRepository.countByStatus("unvalidated"),
         MasterStudentRepository.countAll(),
-        UserRepository.countByRole("guru"),
+        UserRepository.countAllNonAdmin(),
         StudentAttendanceRepository.countByStatus(month, year),
         StudentAttendanceRepository.attendanceRateByGrade(month, year),
         StudentAttendanceRepository.countUniqueDates(month, year),

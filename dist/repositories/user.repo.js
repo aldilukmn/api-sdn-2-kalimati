@@ -75,6 +75,10 @@ class UserRepository {
     static async countByRole(role) {
         return await user_schema_1.default.countDocuments({ role });
     }
+    // Count All Non-Admin Users (GTK = guru + kepala + penjaga)
+    static async countAllNonAdmin() {
+        return await user_schema_1.default.countDocuments({ role: { $ne: "admin" } });
+    }
     // Update User
     static async updateUser(userId, data) {
         if (!userId) {

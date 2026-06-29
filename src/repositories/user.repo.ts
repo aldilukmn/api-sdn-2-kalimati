@@ -85,6 +85,11 @@ export default class UserRepository {
     return await UserModel.countDocuments({ role });
   }
 
+  // Count All Non-Admin Users (GTK = guru + kepala + penjaga)
+  static async countAllNonAdmin(): Promise<number> {
+    return await UserModel.countDocuments({ role: { $ne: "admin" } });
+  }
+
   // Update User
   static async updateUser (userId: string, data: UserRequest): Promise<User> {
     if (!userId) {

@@ -14,7 +14,7 @@ class DashboardService {
             registration_repo_1.default.countByStatus("validated"),
             registration_repo_1.default.countByStatus("unvalidated"),
             master_student_repo_1.default.countAll(),
-            user_repo_1.default.countByRole("guru"),
+            user_repo_1.default.countAllNonAdmin(),
             student_attendance_repo_1.default.countByStatus(month, year),
             student_attendance_repo_1.default.attendanceRateByGrade(month, year),
             student_attendance_repo_1.default.countUniqueDates(month, year),
