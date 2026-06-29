@@ -54,6 +54,7 @@ class StudentAttendanceRepository {
                     _id: "$grade",
                     total: { $sum: 1 },
                     hadir: { $sum: { $cond: [{ $eq: ["$status", "hadir"] }, 1, 0] } },
+                    studentIds: { $addToSet: "$studentId" },
                 },
             },
             { $sort: { _id: 1 } },
@@ -61,6 +62,7 @@ class StudentAttendanceRepository {
         return results.map((r) => ({
             grade: r._id,
             rate: r.total > 0 ? Math.round((r.hadir / r.total) * 100) : 0,
+            studentCount: r.studentIds.length,
         }));
     }
     static async findReportByGrade(grade, month, year) {

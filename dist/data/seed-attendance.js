@@ -36,7 +36,7 @@ function getWeekdays(daysBack) {
         const d = new Date(now);
         d.setDate(d.getDate() - i);
         const day = d.getDay();
-        if (day !== 0 && day !== 6) {
+        if (day !== 0) {
             dates.push(formatDate(d));
         }
     }
