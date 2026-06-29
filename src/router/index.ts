@@ -17,7 +17,7 @@ const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 
 // FOR ADMIN
 router.post(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin , User.register);
-router.get(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.listUser);
+router.get(`${userUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdminOrHead, User.listUser);
 router.delete(`${userUrl}/:id`, UserMiddleware.verifyToken, UserMiddleware.isAdmin, User.deleteUserById);
 router.post(`${baseUrl}/login`, User.login);
 router.post(`${baseUrl}/logout`, UserMiddleware.verifyToken, User.logout);
@@ -30,7 +30,7 @@ router.post(
 );
 
 router.get(
-  `${registrationUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdmin,
+  `${registrationUrl}`, UserMiddleware.verifyToken, UserMiddleware.isAdminOrHead,
   RegistrationController.getAll
 );
 
@@ -85,7 +85,7 @@ router.get(
 router.get(
   `${baseUrl}/dashboard`,
   UserMiddleware.verifyToken,
-  UserMiddleware.isAdmin,
+  UserMiddleware.isAdminOrHead,
   DashboardController.getSummary
 );
 

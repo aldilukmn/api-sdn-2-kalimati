@@ -45,7 +45,7 @@ class UserMiddleware {
             const token = req.headers.authorization;
             const getToken = (0, utils_1.validateToken)(token);
             const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
-            if (decoded.role === 'admin')
+            if (decoded.role === 'admin' || decoded.role === 'kepala')
                 return next();
             if (decoded.grade !== grade) {
                 throw new Error(`Akses ditolak! Anda hanya bisa input presensi untuk kelas ${decoded.grade}.`);
@@ -65,8 +65,8 @@ class UserMiddleware {
             const getToken = (0, utils_1.validateToken)(token);
             const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
             const user = await user_repo_1.default.getUserByUsername(decoded.user);
-            if (user.role !== "admin" && user.role !== "guru") {
-                throw new Error("Akses ditolak! Hanya guru dan admin yang diizinkan.");
+            if (user.role !== "admin" && user.role !== "guru" && user.role !== "kepala") {
+                throw new Error("Akses ditolak! Hanya guru, admin, dan kepala sekolah yang diizinkan.");
             }
             req.token = getToken;
             req.username = decoded.user;
@@ -75,6 +75,24 @@ class UserMiddleware {
         catch (e) {
             if (e instanceof Error) {
                 const response = (0, utils_1.defaultResponse)(401, "fail", e.message);
+                res.status(401).json(response);
+            }
+        }
+    };
+    static isAdminOrHead = async (req, res, next) => {
+        try {
+            const token = req.headers.authorization;
+            const getToken = (0, utils_1.validateToken)(token);
+            const decoded = jsonwebtoken_1.default.verify(getToken, `${process.env.SECRET_KEY}`);
+            const user = await user_repo_1.default.getUserByUsername(decoded.user);
+            if (user.role !== 'admin' && user.role !== 'kepala') {
+                throw new Error("Akses ditolak! Hanya admin dan kepala sekolah yang diizinkan.");
+            }
+            next();
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                const response = (0, utils_1.defaultResponse)(401, 'fail', e.message);
                 res.status(401).json(response);
             }
         }

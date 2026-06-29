@@ -20,14 +20,14 @@ const registrationUrl = `${baseUrl}/registration`;
 const studentAttendanceUrl = `${baseUrl}/student-attendance`;
 // FOR ADMIN
 router.post(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.register);
-router.get(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.listUser);
+router.get(`${userUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdminOrHead, user_controller_1.default.listUser);
 router.delete(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.deleteUserById);
 router.post(`${baseUrl}/login`, user_controller_1.default.login);
 router.post(`${baseUrl}/logout`, middlewares_1.default.verifyToken, user_controller_1.default.logout);
 router.patch(`${userUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, user_controller_1.default.updateUser);
 // PPDB
 router.post(`${registrationUrl}`, registration_controller_1.default.register);
-router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.getAll);
+router.get(`${registrationUrl}`, middlewares_1.default.verifyToken, middlewares_1.default.isAdminOrHead, registration_controller_1.default.getAll);
 router.get(`${registrationUrl}/count`, registration_controller_1.default.getTotalCount);
 router.get(`${registrationUrl}/:id`, registration_controller_1.default.getById);
 router.patch(`${registrationUrl}/:id`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, registration_controller_1.default.updateData);
@@ -40,5 +40,5 @@ router.get(`${baseUrl}/students`, master_student_controller_1.default.getByGrade
 // TEACHER BY GRADE (PUBLIC)
 router.get(`${baseUrl}/teacher-by-grade/:grade`, user_controller_1.default.getTeacherByGrade);
 // DASHBOARD
-router.get(`${baseUrl}/dashboard`, middlewares_1.default.verifyToken, middlewares_1.default.isAdmin, dashboard_controller_1.default.getSummary);
+router.get(`${baseUrl}/dashboard`, middlewares_1.default.verifyToken, middlewares_1.default.isAdminOrHead, dashboard_controller_1.default.getSummary);
 exports.default = router;

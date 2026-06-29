@@ -22,6 +22,10 @@ class UserService {
                                     !nip ? 'nip' :
                                         null} wajib diisi!`);
             }
+            const ALLOWED_ROLES = ['admin', 'guru', 'kepala', 'penjaga'];
+            if (!ALLOWED_ROLES.includes(role.toLowerCase())) {
+                throw new Error(`Role tidak valid! Harus salah satu: ${ALLOWED_ROLES.join(', ')}`);
+            }
             if (role === 'guru' && !grade) {
                 throw new Error('Grade wajib diisi untuk role guru!');
             }
