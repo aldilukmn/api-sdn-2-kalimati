@@ -62,8 +62,8 @@ export default class UserMiddleware {
       next();
     } catch (e) {
       if (e instanceof Error) {
-        const response = defaultResponse(403, 'fail', e.message);
-        res.status(403).json(response);
+        const response = defaultResponse(401, 'fail', e.message);
+        res.status(401).json(response);
       }
     }
   };
@@ -128,8 +128,8 @@ export default class UserMiddleware {
       next();
     } catch (e) {
       if (e instanceof Error) {
-        const response = defaultResponse(403, 'fail', e.message);
-        res.status(403).json(response);
+        const response = defaultResponse(401, 'fail', e.message);
+        res.status(401).json(response);
       }
     }
   };
@@ -152,8 +152,8 @@ export default class UserMiddleware {
 
     } catch (e) {
       if (e instanceof Error) {
-        const response = defaultResponse(403, 'fail', e.message);
-        res.status(403).json(response);
+        const response = defaultResponse(401, 'fail', e.message);
+        res.status(401).json(response);
       }
     }
   }
