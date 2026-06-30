@@ -74,8 +74,8 @@ class UserMiddleware {
         }
         catch (e) {
             if (e instanceof Error) {
-                const response = (0, utils_1.defaultResponse)(403, "fail", e.message);
-                res.status(403).json(response);
+                const response = (0, utils_1.defaultResponse)(401, "fail", e.message);
+                res.status(401).json(response);
             }
         }
     };
@@ -92,8 +92,8 @@ class UserMiddleware {
         }
         catch (e) {
             if (e instanceof Error) {
-                const response = (0, utils_1.defaultResponse)(403, 'fail', e.message);
-                res.status(403).json(response);
+                const response = (0, utils_1.defaultResponse)(401, 'fail', e.message);
+                res.status(401).json(response);
             }
         }
     };
