@@ -35,13 +35,13 @@ export default class StudentAttendanceRepository {
     return filter;
   }
 
-  static async countByStatus(month?: number, year?: number): Promise<{ hadir: number; sakit: number; izin: number; alpha: number }> {
+  static async countByStatus(month?: number, year?: number): Promise<{ hadir: number; sakit: number; izin: number; absen: number }> {
     const filter = this.buildMonthFilter(month, year);
     const results = await StudentAttendanceModel.aggregate([
       { $match: filter },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
-    const counts = { hadir: 0, sakit: 0, izin: 0, alpha: 0 };
+    const counts = { hadir: 0, sakit: 0, izin: 0, absen: 0 };
     results.forEach((r: { _id: string; count: number }) => {
       if (r._id in counts) (counts as any)[r._id] = r.count;
     });
@@ -79,7 +79,7 @@ export default class StudentAttendanceRepository {
     grade: string,
     month?: number,
     year?: number
-  ): Promise<StudentAttendance[]> {
+  ): Promise<any[]> {
     const filter: Record<string, any> = { grade };
 
     if (month && year) {
@@ -89,9 +89,19 @@ export default class StudentAttendanceRepository {
       filter.date = { $regex: new RegExp(`^${year}-`) };
     }
 
-    return await StudentAttendanceModel.find(filter).sort({
-      date: 1,
-      studentId: 1,
-    });
+    return await StudentAttendanceModel.aggregate([
+      { $match: filter },
+      {
+        $group: {
+          _id: "$studentId",
+          name: { $first: "$name" },
+          hadir: { $sum: { $cond: [{ $eq: ["$status", "hadir"] }, 1, 0] } },
+          sakit: { $sum: { $cond: [{ $eq: ["$status", "sakit"] }, 1, 0] } },
+          izin: { $sum: { $cond: [{ $eq: ["$status", "izin"] }, 1, 0] } },
+          absen: { $sum: { $cond: [{ $eq: ["$status", "absen"] }, 1, 0] } },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
   }
 }

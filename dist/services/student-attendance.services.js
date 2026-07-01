@@ -11,7 +11,7 @@ class StudentAttendanceService {
         if (!date || !grade || !entries || entries.length === 0) {
             throw new Error("Data presensi tidak lengkap!");
         }
-        const validStatuses = ["hadir", "sakit", "izin", "alpha"];
+        const validStatuses = ["hadir", "sakit", "izin", "absen"];
         const docs = [];
         for (const entry of entries) {
             if (!entry.studentId ||

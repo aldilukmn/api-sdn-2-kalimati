@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export type StudentAttendanceStatus = "hadir" | "sakit" | "izin" | "alpha";
+export type StudentAttendanceStatus = "hadir" | "sakit" | "izin" | "absen";
 
 export default interface StudentAttendance extends Document {
   studentId: string;

@@ -1,6 +1,6 @@
 export interface StudentAttendanceEntry {
   studentId: string;
-  status: "hadir" | "sakit" | "izin" | "alpha";
+  status: "hadir" | "sakit" | "izin" | "absen";
 }
 
 export default interface StudentAttendanceRequest {

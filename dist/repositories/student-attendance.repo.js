@@ -33,7 +33,7 @@ class StudentAttendanceRepository {
             { $match: filter },
             { $group: { _id: "$status", count: { $sum: 1 } } },
         ]);
-        const counts = { hadir: 0, sakit: 0, izin: 0, alpha: 0 };
+        const counts = { hadir: 0, sakit: 0, izin: 0, absen: 0 };
         results.forEach((r) => {
             if (r._id in counts)
                 counts[r._id] = r.count;
@@ -74,10 +74,20 @@ class StudentAttendanceRepository {
         else if (year) {
             filter.date = { $regex: new RegExp(`^${year}-`) };
         }
-        return await student_attendance_schema_1.default.find(filter).sort({
-            date: 1,
-            studentId: 1,
-        });
+        return await student_attendance_schema_1.default.aggregate([
+            { $match: filter },
+            {
+                $group: {
+                    _id: "$studentId",
+                    name: { $first: "$name" },
+                    hadir: { $sum: { $cond: [{ $eq: ["$status", "hadir"] }, 1, 0] } },
+                    sakit: { $sum: { $cond: [{ $eq: ["$status", "sakit"] }, 1, 0] } },
+                    izin: { $sum: { $cond: [{ $eq: ["$status", "izin"] }, 1, 0] } },
+                    absen: { $sum: { $cond: [{ $eq: ["$status", "absen"] }, 1, 0] } },
+                },
+            },
+            { $sort: { _id: 1 } },
+        ]);
     }
 }
 exports.default = StudentAttendanceRepository;

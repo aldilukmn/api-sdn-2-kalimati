@@ -13,7 +13,7 @@ export default class StudentAttendanceService {
       throw new Error("Data presensi tidak lengkap!");
     }
 
-    const validStatuses = ["hadir", "sakit", "izin", "alpha"];
+    const validStatuses = ["hadir", "sakit", "izin", "absen"];
 
     const docs: any[] = [];
     for (const entry of entries) {
@@ -62,7 +62,7 @@ export default class StudentAttendanceService {
     grade: string,
     month?: number,
     year?: number
-  ): Promise<StudentAttendance[]> => {
+  ): Promise<any[]> => {
     if (!grade) {
       throw new Error("Parameter grade wajib diisi!");
     }

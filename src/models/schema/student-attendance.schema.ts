@@ -25,7 +25,7 @@ const StudentAttendanceSchema: Schema = new Schema(
     },
     status: {
       type: String,
-      enum: ["hadir", "sakit", "izin", "alpha"],
+      enum: ["hadir", "sakit", "izin", "absen"],
       required: true,
     },
     note: {

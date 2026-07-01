@@ -57,7 +57,7 @@ const StudentAttendanceSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["hadir", "sakit", "izin", "alpha"],
+        enum: ["hadir", "sakit", "izin", "absen"],
         required: true,
     },
     note: {

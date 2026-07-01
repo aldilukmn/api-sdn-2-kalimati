@@ -18,7 +18,7 @@ const STATUSES = [
     "hadir", "hadir", "hadir", "hadir", "hadir",
     "sakit", "sakit",
     "izin", "izin",
-    "alpha", "alpha",
+    "absen", "absen",
 ];
 function randomStatus() {
     return STATUSES[Math.floor(Math.random() * STATUSES.length)];
